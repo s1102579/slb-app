@@ -1,6 +1,7 @@
 package com.example.slbapp.ui.main;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,13 +9,19 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.slbapp.MainActivity;
 import com.example.slbapp.MyItemRecyclerViewAdapter;
 import com.example.slbapp.R;
+import com.example.slbapp.database.DatabaseHelper;
 import com.example.slbapp.dummy.DummyContent;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -66,7 +73,7 @@ public class ItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS));
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter( ((MainActivity)getActivity()).getCoursesFromDatabase()));
         }
         return view;
     }

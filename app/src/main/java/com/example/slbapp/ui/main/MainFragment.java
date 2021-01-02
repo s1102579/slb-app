@@ -2,8 +2,6 @@ package com.example.slbapp.ui.main;
 
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,8 +16,6 @@ import android.widget.Button;
 
 import com.example.slbapp.MainActivity;
 import com.example.slbapp.R;
-import com.example.slbapp.database.DatabaseHelper;
-import com.example.slbapp.database.DatabaseInfo;
 import com.example.slbapp.models.Course;
 
 public class MainFragment extends Fragment {
@@ -42,8 +38,8 @@ public class MainFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-        Course course = new Course("2016", "1","IOPR1", "3",true, "7", "android ontwikkeling");
-        ((MainActivity)getActivity()).addCourseToDatabase(course);
+//        Course course = new Course("2016", "1","IOPR1", "3",true, "7", "android ontwikkeling");
+//        ((MainActivity)getActivity()).addCourseToDatabase(course);
         // TODO: Use the ViewModel
     }
 
@@ -61,7 +57,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("knop ingedrukt", "Navigeer naar CourseListActivity");
-                ((MainActivity)getActivity()).navigateFragment(new ItemFragment());
+                ((MainActivity)getActivity()).navigateToFragment(new ItemFragment());
             }
         });
     }
