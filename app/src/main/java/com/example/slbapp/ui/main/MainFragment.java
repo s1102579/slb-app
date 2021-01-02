@@ -2,6 +2,7 @@ package com.example.slbapp.ui.main;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 
@@ -13,10 +14,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.example.slbapp.MainActivity;
 import com.example.slbapp.R;
 import com.example.slbapp.database.DatabaseHelper;
 import com.example.slbapp.database.DatabaseInfo;
+import com.example.slbapp.models.Course;
 
 public class MainFragment extends Fragment {
 
@@ -37,9 +41,28 @@ public class MainFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
+        Course course = new Course("2016", "1","IOPR1", "3",true, "7", "android ontwikkeling");
+        ((MainActivity)getActivity()).addCourseToDatabase(course);
         // TODO: Use the ViewModel
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupButtons();
 
+    }
 
+    private void setupButtons() {
+        // navigates naar list fragment
+        Button button = (Button) getView().findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("knop ingedrukt", "Navigeer naar CourseListActivity");
+                ((MainActivity)getActivity()).navigateFragment(new ItemFragment());
+            }
+        });
+    }
 }

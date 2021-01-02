@@ -1,16 +1,21 @@
 package com.example.slbapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.slbapp.database.DatabaseHelper;
 import com.example.slbapp.database.DatabaseInfo;
 import com.example.slbapp.models.Course;
+import com.example.slbapp.ui.main.ItemFragment;
 import com.example.slbapp.ui.main.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,13 +36,13 @@ public class MainActivity extends AppCompatActivity {
 //        dbHelper.dropCourses(mSQLDB);
 
 
-        Course course = new Course("2016", "1","IKPMD", "3",true, "7", "android ontwikkeling");
-        addCourseToDatabase(course);
+//        Course course = new Course("2016", "1","IKPMD", "3",true, "7", "android ontwikkeling");
+//        addCourseToDatabase(course);
 
         getFromDatabase();
     }
 
-    private void addCourseToDatabase(Course course) {
+    public void addCourseToDatabase(Course course) {
 
         DatabaseHelper dbHelper = DatabaseHelper.getHelper(this);
 
@@ -64,4 +69,15 @@ public class MainActivity extends AppCompatActivity {
         String name = (String) rs.getString(rs.getColumnIndex("name"));
         Log.d("Tim heeft gevonden=", "deze: "+ name);
     }
+
+    public void navigateFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment, null)
+                .setReorderingAllowed(true)
+                .addToBackStack("name") // name can be null
+                .commit();
+
+    }
+
 }
