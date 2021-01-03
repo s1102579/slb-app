@@ -40,6 +40,7 @@ public class MainFragment extends Fragment {
 
 //        Course course = new Course("2016", "1","IOPR1", "3",true, "7", "android ontwikkeling");
 //        ((MainActivity)getActivity()).addCourseToDatabase(course);
+        ((MainActivity)getActivity()).getCoursesFromDatabase();
         // TODO: Use the ViewModel
     }
 

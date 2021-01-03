@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public ArrayList<String> getCoursesFromDatabase() {
+    public ArrayList<String> getCourseNamesFromDatabase() {
         DatabaseHelper dbHelper = DatabaseHelper.getHelper(this);
 
         Cursor rs = dbHelper.query(DatabaseInfo.CourseTables.COURSETABLE, new String[]{"*"},
@@ -106,6 +106,44 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.LENGTH_LONG).setAction("", null).show();
 
         return coursenames;
+    }
+
+    private boolean convertIntToBoolean (int number) {
+        return number != 0;
+    }
+
+    public ArrayList<Course> getCoursesFromDatabase() {
+        DatabaseHelper dbHelper = DatabaseHelper.getHelper(this);
+
+        Cursor rs = dbHelper.query(DatabaseInfo.CourseTables.COURSETABLE, new String[]{"*"},
+                null, null, null, null, null);
+
+        ArrayList<Course> courses = new ArrayList<>();
+        if(rs.moveToFirst()) {
+            while (!rs.isAfterLast()) {
+                String year = (String) rs.getString(rs.getColumnIndex("year"));
+                String period = (String) rs.getString(rs.getColumnIndex("period"));
+                String name = (String) rs.getString(rs.getColumnIndex("name"));
+                boolean isOptional = convertIntToBoolean((int) rs.getInt(rs.getColumnIndex("isOptional")));
+                String ects = (String) rs.getString(rs.getColumnIndex("ects"));
+                String grade = (String) rs.getString(rs.getColumnIndex("grade"));
+                String notes = (String) rs.getString(rs.getColumnIndex("notes"));
+
+                Course course = new Course(year, period, name, ects, isOptional, grade, notes);
+                courses.add(course);
+                rs.moveToNext();
+
+                Log.d("boolean: ", String.valueOf(isOptional));
+                Log.d("year: ", year);
+            }
+        }
+
+        String aantal_rijen = String.valueOf(rs.getCount());
+        Log.d("aantal rijen: ", aantal_rijen);
+        Snackbar.make(this.findViewById(android.R.id.content), "total courses: " + aantal_rijen,
+                Snackbar.LENGTH_LONG).setAction("", null).show();
+
+        return courses;
     }
 
 }
