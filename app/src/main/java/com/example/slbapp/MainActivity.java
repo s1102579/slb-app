@@ -1,15 +1,20 @@
 package com.example.slbapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
+import android.content.ClipData;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -18,6 +23,7 @@ import com.example.slbapp.database.DatabaseInfo;
 import com.example.slbapp.models.Course;
 import com.example.slbapp.ui.main.ItemFragment;
 import com.example.slbapp.ui.main.MainFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -32,9 +38,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
+                    .replace(R.id.fragment_container, MainFragment.newInstance())
                     .commitNow();
         }
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
 // verwijdert Courses tabel uit database
 //        DatabaseHelper dbHelper = DatabaseHelper.getHelper(this);
@@ -44,8 +53,29 @@ public class MainActivity extends AppCompatActivity {
 //        Course course = new Course("2016", "1","IKPMD", "3",true, "7", "android ontwikkeling");
 //        addCourseToDatabase(course);
 
-        getFromDatabase();
+//        getFromDatabase();
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    Fragment selectedFragment = null;
+
+                    switch(item.getItemId()) {
+                        case R.id.nav_home:
+                            selectedFragment = new MainFragment();
+                            break;
+                        case R.id.nav_courses:
+                            selectedFragment = new ItemFragment();
+                            break;
+                    }
+
+                    navigateToFragment(selectedFragment);
+
+                    return true;
+                }
+            };
 
     public void addCourseToDatabase(Course course) {
 
@@ -76,14 +106,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navigateToFragment(Fragment fragment) {
+
+        // simpele fragment navigation
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment, null)
+                .replace(R.id.fragment_container, fragment, null)
                 .setReorderingAllowed(true)
                 .addToBackStack("name") // name can be null
                 .commit();
 
+
+        // navigation component manier NOG NIET WERKEND
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        NavHostFragment navHostFragment =
+//                (NavHostFragment) fragmentManager.findFragmentById(fragment.getId());
+//        NavController navController = navHostFragment.getNavController();
+
     }
+
+
 
     public ArrayList<String> getCourseNamesFromDatabase() {
         DatabaseHelper dbHelper = DatabaseHelper.getHelper(this);
