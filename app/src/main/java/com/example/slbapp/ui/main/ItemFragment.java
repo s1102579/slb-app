@@ -8,13 +8,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.slbapp.CourseFragment;
 import com.example.slbapp.MainActivity;
 import com.example.slbapp.MyItemRecyclerViewAdapter;
 import com.example.slbapp.R;
+import com.example.slbapp.RecyclerItemClickListener;
 
 /**
  * A fragment representing a list of Items.
@@ -61,6 +64,22 @@ public class ItemFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView.addOnItemTouchListener(
+                    new RecyclerItemClickListener(context, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                        @Override public void onItemClick(View view, int position) {
+                            // TODO: hier de een nieuwe fragment openen van 1 van de courses
+                            Log.d("knop ingedrukt", "korte klik");
+                            Log.d("positie", String.valueOf(position));
+                            CourseFragment courseFragment = CourseFragment.newInstance(position);
+                            ((MainActivity)getActivity()).navigateToFragment(courseFragment);
+                        }
+
+                        @Override public void onLongItemClick(View view, int position) {
+                            // do whatever
+                            Log.d("knop ingedrukt", "lange klik");
+                        }
+                    })
+            );
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {

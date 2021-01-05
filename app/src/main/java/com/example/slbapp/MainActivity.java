@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.slbapp.database.DatabaseHelper;
 import com.example.slbapp.database.DatabaseInfo;
@@ -31,6 +32,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public static SQLiteDatabase mSQLDB;
+    public ArrayList<Course> allCourses = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.fragment_container, MainFragment.newInstance())
                     .commitNow();
         }
+
+        allCourses = getCoursesFromDatabase();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
@@ -104,6 +108,18 @@ public class MainActivity extends AppCompatActivity {
         String name = (String) rs.getString(rs.getColumnIndex("name"));
         Log.d("Tim heeft gevonden=", "deze: "+ name);
     }
+
+    public ArrayList<Course> getCourses() {
+        return allCourses;
+    }
+
+    public Course getCourse(int position) {
+        return getCourses().get(position);
+    }
+
+//    public Course getCourse(int position) {
+//        return getCoursesFromDatabase().get(position);
+//    }
 
     public void navigateToFragment(Fragment fragment) {
 
@@ -185,6 +201,31 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.LENGTH_LONG).setAction("", null).show();
 
         return courses;
+    }
+
+
+    public void setupTextViewsCourseFragment(Course course) {
+
+        Log.d("course name: ", course.getName());
+
+        TextView courseName = (TextView) findViewById(R.id.tv_courseName);
+        TextView year = (TextView) findViewById(R.id.tv_year);
+        TextView ects = (TextView) findViewById(R.id.tv_ects);
+        TextView isOptional = (TextView) findViewById(R.id.tv_isOptional);
+        TextView period = (TextView) findViewById(R.id.tv_period);
+        TextView notes = (TextView) findViewById(R.id.tv_notes);
+
+        courseName.setText(course.getName());
+        year.setText(course.getYear());
+        ects.setText(course.getEcts());
+        period.setText(course.getPeriod());
+        notes.setText(course.getNotes());
+
+        if (course.isOptional()) {
+            isOptional.setText("keuzevak");
+        } else {
+            isOptional.setText("verplicht vak");
+        }
     }
 
 }
