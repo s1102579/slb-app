@@ -3,6 +3,8 @@ package com.example.slbapp.ui.main;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -28,6 +33,7 @@ public class ItemFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    private MyItemRecyclerViewAdapter recyclerAdapter = null;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -48,6 +54,7 @@ public class ItemFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        recyclerAdapter = new MyItemRecyclerViewAdapter( ((MainActivity)getActivity()).getCourseNamesFromDatabase());
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
@@ -56,9 +63,32 @@ public class ItemFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main_menu, menu);
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                recyclerAdapter.getFilter().filter(newText);
+                return false;
+            }
+        }); // check later of dit kan
+        super.onCreateOptionsMenu(menu,inflater);
+    }
+
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        setHasOptionsMenu(true);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -85,7 +115,7 @@ public class ItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter( ((MainActivity)getActivity()).getCourseNamesFromDatabase()));
+            recyclerView.setAdapter(recyclerAdapter);
         }
         return view;
     }

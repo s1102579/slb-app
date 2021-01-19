@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.slbapp.database.DatabaseHelper;
@@ -54,12 +55,11 @@ public class MainActivity extends AppCompatActivity {
 //        dbHelper.dropCourses(mSQLDB);
 
 
-//        Course course = new Course("2016", "1","IKPMD", "3",true, "7", "android ontwikkeling");
+//        Course course = new Course("2016", "1","IOPR1", "3",true, "7", "android ontwikkeling");
 //        addCourseToDatabase(course);
 
 //        getFromDatabase();
     }
-
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -197,8 +197,8 @@ public class MainActivity extends AppCompatActivity {
 
         String aantal_rijen = String.valueOf(rs.getCount());
         Log.d("aantal rijen: ", aantal_rijen);
-        Snackbar.make(this.findViewById(android.R.id.content), "total courses: " + aantal_rijen,
-                Snackbar.LENGTH_LONG).setAction("", null).show();
+//        Snackbar.make(this.findViewById(android.R.id.content), "total courses: " + aantal_rijen,
+//                Snackbar.LENGTH_LONG).setAction("", null).show();
 
         return courses;
     }
