@@ -10,6 +10,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.example.slbapp.dummy.DummyContent.DummyItem;
+import com.example.slbapp.models.Course;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,12 +23,14 @@ import java.util.List;
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> implements Filterable {
 
 //    private final List<DummyItem> mValues;
-    private List<String> courseNames;
-    private List<String> courseNamesAll;
 
-    public MyItemRecyclerViewAdapter(List<String> names) {
-        courseNames = names;
-        courseNamesAll = new ArrayList<>(names);
+    private List<Course> courses;
+    private List<Course> allCourses;
+
+    public MyItemRecyclerViewAdapter(List<Course> courses) {
+
+        this.courses = courses;
+        this.allCourses = new ArrayList<>(courses);
     }
 
     @Override
@@ -39,14 +42,13 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = courseNames.get(position);
-//        holder.mIdView.setText(courseNames.get(position).id);
-        holder.mContentView.setText(courseNames.get(position));
+        holder.mItem = courses.get(position).getName();
+        holder.mContentView.setText(courses.get(position).getName());
     }
 
     @Override
     public int getItemCount() {
-        return courseNames.size();
+        return courses.size();
     }
 
     @Override
@@ -59,12 +61,12 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
 
-            List<String> filteredList = new ArrayList<>();
+            List<Course> filteredList = new ArrayList<>();
             if(charSequence.toString().isEmpty()) {
-                filteredList.addAll(courseNamesAll);
+                filteredList.addAll(allCourses);
             } else {
-                for (String course: courseNamesAll) {
-                    if (course.toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                for (Course course: allCourses) {
+                    if (course.getName().toLowerCase().contains(charSequence.toString().toLowerCase())) {
                         filteredList.add(course);
                     }
                 }
@@ -79,8 +81,9 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         // runs on ui thread
         @Override
         protected void publishResults(CharSequence constraint, FilterResults filterResults) {
-            courseNames.clear();
-            courseNames.addAll((Collection<? extends String>)filterResults.values);
+            courses.clear();
+            courses.addAll((Collection<? extends Course>)filterResults.values);
+            MainActivity.getInstance().setFilteredCourses(courses);
             notifyDataSetChanged();
         }
     };

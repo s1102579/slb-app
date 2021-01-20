@@ -60,7 +60,7 @@ public class CourseFragment extends Fragment {
         if (getArguments() != null) {
             Log.d("onCreate", "CourseFragment onCreate if statement");
             position = getArguments().getInt(ARG_POSITION);
-            course = ((MainActivity)getActivity()).getCourse(position);
+            course = ((MainActivity)getActivity()).getFilteredCourse(position);
         }
 
     }

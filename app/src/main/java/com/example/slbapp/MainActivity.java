@@ -4,20 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 
-import android.content.ClipData;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.slbapp.database.DatabaseHelper;
@@ -34,6 +27,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     public static SQLiteDatabase mSQLDB;
     public ArrayList<Course> allCourses = new ArrayList<>();
+    public List<Course> filteredCourses = new ArrayList<>();
+    private static MainActivity instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, MainFragment.newInstance())
                     .commitNow();
+            instance = this;
         }
 
         allCourses = getCoursesFromDatabase();
@@ -60,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
 
 //        getFromDatabase();
     }
+
+    public static MainActivity getInstance() {
+        return instance;
+    }
+
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -117,7 +118,19 @@ public class MainActivity extends AppCompatActivity {
         return getCourses().get(position);
     }
 
-//    public Course getCourse(int position) {
+    public void setFilteredCourses(List<Course> filteredCourses) {
+        this.filteredCourses = filteredCourses;
+    }
+
+    public List<Course> getFilteredCourses() {
+        return filteredCourses;
+    }
+
+    public Course getFilteredCourse(int position) {
+        return getFilteredCourses().get(position);
+    }
+
+    //    public Course getCourse(int position) {
 //        return getCoursesFromDatabase().get(position);
 //    }
 

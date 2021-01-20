@@ -54,7 +54,7 @@ public class ItemFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        recyclerAdapter = new MyItemRecyclerViewAdapter( ((MainActivity)getActivity()).getCourseNamesFromDatabase());
+        recyclerAdapter = new MyItemRecyclerViewAdapter( ((MainActivity)getActivity()).getCoursesFromDatabase());
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
