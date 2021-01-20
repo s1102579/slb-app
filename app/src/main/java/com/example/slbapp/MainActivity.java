@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         allCourses = getCoursesFromDatabase();
+        setFilteredCourses(allCourses);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
