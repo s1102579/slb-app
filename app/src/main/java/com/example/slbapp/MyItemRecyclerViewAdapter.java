@@ -44,6 +44,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = courses.get(position).getName();
         holder.mContentView.setText(courses.get(position).getName());
+        holder.mYearView.setText(courses.get(position).getYear());
     }
 
     @Override
@@ -91,12 +92,14 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mContentView;
+        public final TextView mYearView;
         public String mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mContentView = (TextView) view.findViewById(R.id.content);
+            mYearView = view.findViewById(R.id.content_year);
         }
 
         @Override
