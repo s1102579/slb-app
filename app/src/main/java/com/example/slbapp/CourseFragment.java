@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.slbapp.models.Course;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,15 +39,6 @@ public class CourseFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CourseFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static CourseFragment newInstance(int position) {
         CourseFragment fragment = new CourseFragment();
         Bundle args = new Bundle();
@@ -81,23 +74,25 @@ public class CourseFragment extends Fragment {
     }
 
         private void setupTextViews() {
-        TextView courseName = (TextView) getView().findViewById(R.id.tv_courseName);
-        TextView year = (TextView) getView().findViewById(R.id.tv_year);
-        TextView ects = (TextView) getView().findViewById(R.id.tv_ects);
-        TextView isOptional = (TextView) getView().findViewById(R.id.tv_isOptional);
-        TextView period = (TextView) getView().findViewById(R.id.tv_period);
-        TextView notes = (TextView) getView().findViewById(R.id.tv_notes);
+        TextInputLayout courseName = (TextInputLayout) getView().findViewById(R.id.text_input_course);
+            TextInputLayout year = (TextInputLayout) getView().findViewById(R.id.text_input_year);
+            TextInputLayout ects = (TextInputLayout) getView().findViewById(R.id.text_input_ects);
+            TextInputLayout grade = (TextInputLayout) getView().findViewById(R.id.text_input_grade);
+            TextInputLayout isOptional = (TextInputLayout) getView().findViewById(R.id.text_input_isOptional);
+            TextInputLayout period = (TextInputLayout) getView().findViewById(R.id.text_input_period);
+            TextInputLayout notes = (TextInputLayout) getView().findViewById(R.id.text_input_notes);
 
-        courseName.setText(course.getName());
-        year.setText(course.getYear());
-        ects.setText(course.getEcts());
-        period.setText(course.getPeriod());
-        notes.setText(course.getNotes());
+        courseName.getEditText().setText(course.getName());
+        year.getEditText().setText(course.getYear());
+        ects.getEditText().setText(course.getEcts());
+        grade.getEditText().setText(course.getGrade());
+        period.getEditText().setText(course.getPeriod());
+        notes.getEditText().setText(course.getNotes());
 
         if (course.isOptional()) {
-            isOptional.setText("keuzevak");
+            isOptional.getEditText().setText("keuzevak");
         } else {
-            isOptional.setText("verplicht vak");
+            isOptional.getEditText().setText("verplicht vak");
         }
     }
 }

@@ -1,0 +1,21 @@
+[
+  {"year":"1","period": "1","name":"IARCH","ects": "3","isOptional":"false","grade": "1","notes": "architectuur vak"},
+  {"year":"1","period": "1","name":"IIBPM","ects": "3","isOptional":"false","grade": "1","notes": "..."},
+  {"year":"1","period": "1","name":"IHBO","ects": "3","isOptional":"false","grade": "1","notes": "..."},
+  {"year":"1","period": "1","name":"IOPR1","ects": "3","isOptional":"false","grade": "1","notes": "..."},
+  {"year":"1","period": "2","name":"INET","ects": "3","isOptional":"false","grade": "1","notes": "..."},
+  {"year":"1","period": "2","name":"IWDR","ects": "3","isOptional":"false","grade": "1","notes": "html en css website maken"},
+  {"year":"1","period": "2","name":"IRDB","ects": "3","isOptional":"false","grade": "1","notes": "sql leren"},
+  {"year":"1","period": "2","name":"IIBUI","ects": "3","isOptional":"false","grade": "1","notes": "..."},
+  {"year":"1","period": "2","name":"IPRODAM","ects": "3","isOptional":"false","grade": "1","notes": "..."},
+  {"year":"1","period": "2","name":"IPROMEDT","ects": "3","isOptional":"false","grade": "1","notes": "..."},
+  {"year":"1","period": "3","name":"IMUML","ects": "3","isOptional":"false","grade": "1","notes": "..."},
+  {"year":"1","period": "3","name":"IOPR2","ects": "3","isOptional":"false","grade": "1","notes": "..."},
+  {"year":"1","period": "3","name":"IFIT","ects": "3","isOptional":"false","grade": "1","notes": "..."},
+  {"year":"1","period": "3","name":"IPOFIT","ects": "3","isOptional":"false","grade": "1","notes": "..."},
+  {"year":"1","period": "3","name":"IPOSE","ects": "3","isOptional":"false","grade": "1","notes": "..."},
+  {"year":"1","period": "3","name":"IPROV","ects": "3","isOptional":"false","grade": "1","notes": "..."},
+  {"year":"1","period": "4","name":"ICOMMP","ects": "3","isOptional":"false","grade": "1","notes": "..."},
+  {"year":"1","period": "4","name":"ISLP","ects": "3","isOptional":"false","grade": "1","notes": "..."},
+  {"year":"1","period": "4","name":"IPSEN","ects": "3","isOptional":"false","grade": "1","notes": "software engineer eind project propedeuse"}
+]

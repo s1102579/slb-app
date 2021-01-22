@@ -20,7 +20,11 @@ import com.example.slbapp.ui.main.ItemFragment;
 import com.example.slbapp.ui.main.MainFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
                     .commitNow();
             instance = this;
         }
+        makeClassesFromJson();
 
         allCourses = getCoursesFromDatabase();
         setFilteredCourses(allCourses);
@@ -109,6 +114,44 @@ public class MainActivity extends AppCompatActivity {
         rs.moveToFirst();
         String name = (String) rs.getString(rs.getColumnIndex("name"));
         Log.d("Tim heeft gevonden=", "deze: "+ name);
+    }
+
+    private void makeClassesFromJson() {
+        DatabaseHelper dbHelper = DatabaseHelper.getHelper(this);
+
+//        JsonReader json = new JsonReader(new FileReader(readJSONFromAsset()));
+
+//        dbHelper.dropCourses(mSQLDB);
+
+        // van bestand in project
+        String json = readJSONFromAsset("courses.json");
+
+        Log.d("json bestand", json);
+        Gson gson = new Gson();
+
+        Course[] courses = gson.fromJson(json, Course[].class);
+
+        for (Course cours : courses) {
+            addCourseToDatabase(cours);
+        }
+
+    }
+
+    // haalt een json bestand van assets en zet die om in String
+    public String readJSONFromAsset(String filename) {
+        String json = null;
+        try {
+            InputStream is = getAssets().open(filename);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 
     public ArrayList<Course> getCourses() {
@@ -218,28 +261,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void setupTextViewsCourseFragment(Course course) {
-
-        Log.d("course name: ", course.getName());
-
-        TextView courseName = (TextView) findViewById(R.id.tv_courseName);
-        TextView year = (TextView) findViewById(R.id.tv_year);
-        TextView ects = (TextView) findViewById(R.id.tv_ects);
-        TextView isOptional = (TextView) findViewById(R.id.tv_isOptional);
-        TextView period = (TextView) findViewById(R.id.tv_period);
-        TextView notes = (TextView) findViewById(R.id.tv_notes);
-
-        courseName.setText(course.getName());
-        year.setText(course.getYear());
-        ects.setText(course.getEcts());
-        period.setText(course.getPeriod());
-        notes.setText(course.getNotes());
-
-        if (course.isOptional()) {
-            isOptional.setText("keuzevak");
-        } else {
-            isOptional.setText("verplicht vak");
-        }
-    }
+//    public void setupTextViewsCourseFragment(Course course) {
+//
+//        Log.d("course name: ", course.getName());
+//
+//        TextView courseName = (TextInputEditText) findViewById(R.id.text_input_course);
+//        TextView year = (TextInputEditText) findViewById(R.id.text_input_year);
+//        TextView ects = (TextInputEditText) findViewById(R.id.text_input_ects);
+//        TextView isOptional = (TextInputEditText) findViewById(R.id.text_input_isOptional);
+//        TextView period = (TextInputEditText) findViewById(R.id.text_input_period);
+//        TextView notes = (TextInputEditText) findViewById(R.id.text_input_notes);
+//
+//        courseName.setText(course.getName());
+//        year.setText(course.getYear());
+//        ects.setText(course.getEcts());
+//        period.setText(course.getPeriod());
+//        notes.setText(course.getNotes());
+//
+//        if (course.isOptional()) {
+//            isOptional.setText("keuzevak");
+//        } else {
+//            isOptional.setText("verplicht vak");
+//        }
+//    }
 
 }
