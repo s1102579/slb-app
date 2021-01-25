@@ -10,10 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
 import com.example.slbapp.models.Course;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 /**
@@ -34,6 +33,14 @@ public class CourseFragment extends Fragment {
     private String mParam2;
     private int position;
     private Course course = new Course();
+
+    TextInputLayout courseName;
+    TextInputLayout year;
+    TextInputLayout ects;
+    TextInputLayout grade;
+    TextInputLayout isOptional;
+    TextInputLayout period;
+    TextInputLayout notes;
 
     public CourseFragment() {
         // Required empty public constructor
@@ -70,17 +77,19 @@ public class CourseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 //        ((MainActivity)getActivity()).setupTextViewsCourseFragment(course);
 //        Log.d("cursusNaam", course.getName());
+        setupButtons();
         setupTextViews();
     }
 
-        private void setupTextViews() {
-        TextInputLayout courseName = (TextInputLayout) getView().findViewById(R.id.text_input_course);
-            TextInputLayout year = (TextInputLayout) getView().findViewById(R.id.text_input_year);
-            TextInputLayout ects = (TextInputLayout) getView().findViewById(R.id.text_input_ects);
-            TextInputLayout grade = (TextInputLayout) getView().findViewById(R.id.text_input_grade);
-            TextInputLayout isOptional = (TextInputLayout) getView().findViewById(R.id.text_input_isOptional);
-            TextInputLayout period = (TextInputLayout) getView().findViewById(R.id.text_input_period);
-            TextInputLayout notes = (TextInputLayout) getView().findViewById(R.id.text_input_notes);
+    private void setupTextViews() {
+
+        courseName = (TextInputLayout) getView().findViewById(R.id.text_input_course);
+        year = (TextInputLayout) getView().findViewById(R.id.text_input_year);
+        ects = (TextInputLayout) getView().findViewById(R.id.text_input_ects);
+        grade = (TextInputLayout) getView().findViewById(R.id.text_input_grade);
+        isOptional = (TextInputLayout) getView().findViewById(R.id.text_input_isOptional);
+        period = (TextInputLayout) getView().findViewById(R.id.text_input_period);
+        notes = (TextInputLayout) getView().findViewById(R.id.text_input_notes);
 
         courseName.getEditText().setText(course.getName());
         year.getEditText().setText(course.getYear());
@@ -94,5 +103,38 @@ public class CourseFragment extends Fragment {
         } else {
             isOptional.getEditText().setText("verplicht vak");
         }
+    }
+
+    private void setupButtons() {
+        Button button = (Button) getView().findViewById(R.id.save_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("knop ingedrukt", "update cursus");
+                saveButtonHandler();
+            }
+        });
+    }
+
+
+
+    private void saveButtonHandler() {
+        boolean optional;
+        if (isOptional.getEditText().getText().toString() == "verpicht vak") {
+            optional = false;
+        } else {
+            optional = true;
+        }
+
+        Course course = new Course(year.getEditText().getText().toString(),
+                period.getEditText().getText().toString(),
+                courseName.getEditText().getText().toString(),
+                ects.getEditText().getText().toString(),
+                optional,
+                grade.getEditText().getText().toString(),
+                notes.getEditText().getText().toString());
+
+        // TODO verander naar update Course
+        ((MainActivity)getActivity()).addCourseToDatabase(course);
     }
 }

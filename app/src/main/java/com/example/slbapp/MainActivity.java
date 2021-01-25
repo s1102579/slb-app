@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                     .commitNow();
             instance = this;
         }
-        makeClassesFromJson();
+//        makeClassesFromJson();
 
         allCourses = getCoursesFromDatabase();
         setFilteredCourses(allCourses);
