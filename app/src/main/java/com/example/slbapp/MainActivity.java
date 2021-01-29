@@ -80,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.nav_courses:
                             selectedFragment = new ItemFragment();
                             break;
+                        case R.id.nav_addCourse:
+                            selectedFragment = new CourseFragment();
+                            break;
                     }
 
                     navigateToFragment(selectedFragment);
@@ -102,6 +105,31 @@ public class MainActivity extends AppCompatActivity {
         values.put(DatabaseInfo.CourseColumn.NOTES, course.getNotes());
 
         dbHelper.insert(DatabaseInfo.CourseTables.COURSETABLE, null, values);
+
+        setAllCourses(getCoursesFromDatabase());
+        setFilteredCourses(allCourses);
+
+    }
+
+    public void updateCourseToDatabase(Course course) {
+        DatabaseHelper dbHelper = DatabaseHelper.getHelper(this);
+
+        ContentValues values = new ContentValues();
+        values.put(DatabaseInfo.CourseColumn.YEAR, course.getYear());
+        values.put(DatabaseInfo.CourseColumn.PERIOD, course.getPeriod());
+        values.put(DatabaseInfo.CourseColumn.NAME, course.getName());
+        values.put(DatabaseInfo.CourseColumn.ECTS, course.getEcts());
+        values.put(DatabaseInfo.CourseColumn.ISOPTIONAL, course.isOptional());
+        values.put(DatabaseInfo.CourseColumn.GRADE, course.getGrade());
+        values.put(DatabaseInfo.CourseColumn.NOTES, course.getNotes());
+
+
+        Log.d("name_value", values.get("name").toString());
+
+        dbHelper.update(DatabaseInfo.CourseTables.COURSETABLE, values);
+
+        setAllCourses(getCoursesFromDatabase());
+        setFilteredCourses(allCourses);
 
     }
 
@@ -156,6 +184,10 @@ public class MainActivity extends AppCompatActivity {
 
     public ArrayList<Course> getCourses() {
         return allCourses;
+    }
+
+    public void setAllCourses(ArrayList<Course> courses) {
+        this.allCourses = courses;
     }
 
     public Course getCourse(int position) {

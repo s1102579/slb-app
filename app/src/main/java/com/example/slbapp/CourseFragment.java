@@ -33,6 +33,7 @@ public class CourseFragment extends Fragment {
     private String mParam2;
     private int position;
     private Course course = new Course();
+    private boolean courseIsEmpty = false;
 
     TextInputLayout courseName;
     TextInputLayout year;
@@ -76,12 +77,14 @@ public class CourseFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 //        ((MainActivity)getActivity()).setupTextViewsCourseFragment(course);
-//        Log.d("cursusNaam", course.getName());
+        Log.d("onViewCreated", "is het hier");
         setupButtons();
         setupTextViews();
     }
 
     private void setupTextViews() {
+
+        Log.d("setupTextViews", "test");
 
         courseName = (TextInputLayout) getView().findViewById(R.id.text_input_course);
         year = (TextInputLayout) getView().findViewById(R.id.text_input_year);
@@ -91,18 +94,25 @@ public class CourseFragment extends Fragment {
         period = (TextInputLayout) getView().findViewById(R.id.text_input_period);
         notes = (TextInputLayout) getView().findViewById(R.id.text_input_notes);
 
-        courseName.getEditText().setText(course.getName());
-        year.getEditText().setText(course.getYear());
-        ects.getEditText().setText(course.getEcts());
-        grade.getEditText().setText(course.getGrade());
-        period.getEditText().setText(course.getPeriod());
-        notes.getEditText().setText(course.getNotes());
+        if (course.getName() != null) {
+            courseName.getEditText().setText(course.getName());
+            year.getEditText().setText(course.getYear());
+            ects.getEditText().setText(course.getEcts());
+            grade.getEditText().setText(course.getGrade());
+            period.getEditText().setText(course.getPeriod());
+            notes.getEditText().setText(course.getNotes());
 
-        if (course.isOptional()) {
-            isOptional.getEditText().setText("keuzevak");
+            Log.d("courseName", courseName.getEditText().getText().toString());
+
+            if (course.isOptional()) {
+                isOptional.getEditText().setText("keuzevak");
+            } else {
+                isOptional.getEditText().setText("verplicht vak");
+            }
         } else {
-            isOptional.getEditText().setText("verplicht vak");
+            courseIsEmpty = true;
         }
+
     }
 
     private void setupButtons() {
@@ -110,21 +120,16 @@ public class CourseFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("knop ingedrukt", "update cursus");
+                Log.d("knop ingedrukt", "save course");
                 saveButtonHandler();
             }
         });
     }
 
 
-
     private void saveButtonHandler() {
         boolean optional;
-        if (isOptional.getEditText().getText().toString() == "verpicht vak") {
-            optional = false;
-        } else {
-            optional = true;
-        }
+        optional = !isOptional.getEditText().getText().toString().equals("verplicht vak");
 
         Course course = new Course(year.getEditText().getText().toString(),
                 period.getEditText().getText().toString(),
@@ -134,7 +139,10 @@ public class CourseFragment extends Fragment {
                 grade.getEditText().getText().toString(),
                 notes.getEditText().getText().toString());
 
-        // TODO verander naar update Course
-        ((MainActivity)getActivity()).addCourseToDatabase(course);
+        if(courseIsEmpty) {
+            ((MainActivity)getActivity()).addCourseToDatabase(course);
+        } else {
+            ((MainActivity)getActivity()).updateCourseToDatabase(course);
+        }
     }
 }

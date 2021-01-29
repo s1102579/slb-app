@@ -61,6 +61,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         mSQLDB.insert(table, nullColumnHack, values);
     }
 
+    public void update(String table, ContentValues values){
+        mSQLDB.update(table, values, "name = ?", new String[]{values.get("name").toString()});
+    }
+
     public Cursor query(String table, String[] columns, String selection, String[] selectArgs, String groupBy, String having, String orderBy){
         return mSQLDB.query(table, columns, selection, selectArgs, groupBy, having, orderBy);
     }
