@@ -10,7 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.slbapp.models.Course;
 import com.google.android.material.textfield.TextInputLayout;
@@ -20,7 +24,7 @@ import com.google.android.material.textfield.TextInputLayout;
  * Use the {@link CourseFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CourseFragment extends Fragment {
+public class CourseFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -80,6 +84,37 @@ public class CourseFragment extends Fragment {
         Log.d("onViewCreated", "is het hier");
         setupButtons();
         setupTextViews();
+        setupSpinner();
+    }
+
+    // deze twee methods zijn voor de Spinner
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        course.setOptional(position == 0);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    private void setupSpinner() {
+        Spinner spinner = (Spinner) getView().findViewById(R.id.spinner_isOptional);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.isOptionalString, android.R.layout.simple_spinner_item);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+
+        if (course.isOptional()) {
+            spinner.setSelection(0);
+        } else {
+            spinner.setSelection(1);
+        }
     }
 
     private void setupTextViews() {
@@ -90,7 +125,6 @@ public class CourseFragment extends Fragment {
         year = (TextInputLayout) getView().findViewById(R.id.text_input_year);
         ects = (TextInputLayout) getView().findViewById(R.id.text_input_ects);
         grade = (TextInputLayout) getView().findViewById(R.id.text_input_grade);
-        isOptional = (TextInputLayout) getView().findViewById(R.id.text_input_isOptional);
         period = (TextInputLayout) getView().findViewById(R.id.text_input_period);
         notes = (TextInputLayout) getView().findViewById(R.id.text_input_notes);
 
@@ -104,11 +138,6 @@ public class CourseFragment extends Fragment {
 
             Log.d("courseName", courseName.getEditText().getText().toString());
 
-            if (course.isOptional()) {
-                isOptional.getEditText().setText("keuzevak");
-            } else {
-                isOptional.getEditText().setText("verplicht vak");
-            }
         } else {
             courseIsEmpty = true;
         }
@@ -128,21 +157,19 @@ public class CourseFragment extends Fragment {
 
 
     private void saveButtonHandler() {
-        boolean optional;
-        optional = !isOptional.getEditText().getText().toString().equals("verplicht vak");
 
-        Course course = new Course(year.getEditText().getText().toString(),
+        Course tempCourse = new Course(year.getEditText().getText().toString(),
                 period.getEditText().getText().toString(),
                 courseName.getEditText().getText().toString(),
                 ects.getEditText().getText().toString(),
-                optional,
+                course.isOptional(),
                 grade.getEditText().getText().toString(),
                 notes.getEditText().getText().toString());
 
         if(courseIsEmpty) {
-            ((MainActivity)getActivity()).addCourseToDatabase(course);
+            ((MainActivity)getActivity()).addCourseToDatabase(tempCourse);
         } else {
-            ((MainActivity)getActivity()).updateCourseToDatabase(course);
+            ((MainActivity)getActivity()).updateCourseToDatabase(tempCourse);
         }
     }
 }
