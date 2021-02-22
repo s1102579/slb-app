@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,9 +45,33 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
     TextInputLayout year;
     TextInputLayout ects;
     TextInputLayout grade;
-    TextInputLayout isOptional;
     TextInputLayout period;
     TextInputLayout notes;
+    Button button;
+
+    private TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String courseNameInput = courseName.getEditText().getText().toString().trim();
+            String yearInput = year.getEditText().getText().toString().trim();
+            String ectsInput = ects.getEditText().getText().toString().trim();
+            String gradeInput = grade.getEditText().getText().toString().trim();
+            String periodInput = period.getEditText().getText().toString().trim();
+
+            button.setEnabled(!courseNameInput.isEmpty() && !yearInput.isEmpty() &&
+                    !ectsInput.isEmpty() && !gradeInput.isEmpty() && !periodInput.isEmpty());
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
 
     public CourseFragment() {
         // Required empty public constructor
@@ -85,6 +111,7 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
         setupButtons();
         setupTextViews();
         setupSpinner();
+
     }
 
     // deze twee methods zijn voor de Spinner
@@ -128,6 +155,12 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
         period = (TextInputLayout) getView().findViewById(R.id.text_input_period);
         notes = (TextInputLayout) getView().findViewById(R.id.text_input_notes);
 
+        courseName.getEditText().addTextChangedListener(textWatcher);
+        year.getEditText().addTextChangedListener(textWatcher);
+        ects.getEditText().addTextChangedListener(textWatcher);
+        grade.getEditText().addTextChangedListener(textWatcher);
+        period.getEditText().addTextChangedListener(textWatcher);
+
         if (course.getName() != null) {
             courseName.getEditText().setText(course.getName());
             year.getEditText().setText(course.getYear());
@@ -145,7 +178,8 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
     }
 
     private void setupButtons() {
-        Button button = (Button) getView().findViewById(R.id.save_button);
+        button = (Button) getView().findViewById(R.id.save_button);
+        button.setEnabled(false);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
