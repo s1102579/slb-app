@@ -56,18 +56,40 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            CourseValidationHandler validator = new CourseValidationHandler();
+
             String courseNameInput = courseName.getEditText().getText().toString().trim();
             String yearInput = year.getEditText().getText().toString().trim();
             String ectsInput = ects.getEditText().getText().toString().trim();
             String gradeInput = grade.getEditText().getText().toString().trim();
             String periodInput = period.getEditText().getText().toString().trim();
 
+
+
+
+            // validate inputs
+
             button.setEnabled(!courseNameInput.isEmpty() && !yearInput.isEmpty() &&
                     !ectsInput.isEmpty() && !gradeInput.isEmpty() && !periodInput.isEmpty());
+
+//            button.setEnabled(!courseNameInput.isEmpty() &&
+//                    courseName.getError().equals(false) &&
+//                    year.getError().equals(false) &&
+//                    ects.getError().equals(false) &&
+//                    grade.getError().equals(false) &&
+//                    period.getError().equals(false));
+
+            courseName = validator.validateCourseName(courseName, courseNameInput);
+            year = validator.validateYear(year, yearInput);
+            ects = validator.validateEcts(ects, ectsInput);
+            grade = validator.validateGrade(grade, gradeInput);
+            period = validator.validateYear(period, periodInput);
+
         }
 
         @Override
         public void afterTextChanged(Editable s) {
+
 
         }
     };
