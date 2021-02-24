@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +17,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.slbapp.models.Course;
+import com.example.slbapp.ui.main.ItemFragment;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 /**
@@ -28,15 +30,8 @@ import com.google.android.material.textfield.TextInputLayout;
  */
 public class CourseFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private static final String ARG_POSITION = "course";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private int position;
     private Course course = new Course();
     private boolean courseIsEmpty = false;
@@ -69,21 +64,21 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
 
             // validate inputs
 
-            button.setEnabled(!courseNameInput.isEmpty() && !yearInput.isEmpty() &&
-                    !ectsInput.isEmpty() && !gradeInput.isEmpty() && !periodInput.isEmpty());
-
-//            button.setEnabled(!courseNameInput.isEmpty() &&
-//                    courseName.getError().equals(false) &&
-//                    year.getError().equals(false) &&
-//                    ects.getError().equals(false) &&
-//                    grade.getError().equals(false) &&
-//                    period.getError().equals(false));
+//            button.setEnabled(!courseNameInput.isEmpty() && !yearInput.isEmpty() &&
+//                    !ectsInput.isEmpty() && !gradeInput.isEmpty() && !periodInput.isEmpty());
 
             courseName = validator.validateCourseName(courseName, courseNameInput);
             year = validator.validateYear(year, yearInput);
             ects = validator.validateEcts(ects, ectsInput);
             grade = validator.validateGrade(grade, gradeInput);
             period = validator.validateYear(period, periodInput);
+
+            button.setEnabled(!courseNameInput.isEmpty() &&
+                    TextUtils.isEmpty(courseName.getError()) &&
+                    TextUtils.isEmpty(year.getError()) &&
+                    TextUtils.isEmpty(ects.getError()) &&
+                    TextUtils.isEmpty(grade.getError()) &&
+                    TextUtils.isEmpty(period.getError()));
 
         }
 
@@ -131,7 +126,7 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
 //        ((MainActivity)getActivity()).setupTextViewsCourseFragment(course);
         Log.d("onViewCreated", "is het hier");
         setupButtons();
-        setupTextViews();
+        setupTextInput();
         setupSpinner();
 
     }
@@ -166,7 +161,7 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
         }
     }
 
-    private void setupTextViews() {
+    private void setupTextInput() {
 
         Log.d("setupTextViews", "test");
 
@@ -224,8 +219,18 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
 
         if(courseIsEmpty) {
             ((MainActivity)getActivity()).addCourseToDatabase(tempCourse);
+            Snackbar.make(getView(), "added Course: " +
+                    courseName.getEditText().getText().toString(), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            ((MainActivity)getActivity()).navigateToFragment(new ItemFragment());
+
         } else {
             ((MainActivity)getActivity()).updateCourseToDatabase(tempCourse);
+            Snackbar.make(getView(), "updated Course: " +
+                    courseName.getEditText().getText().toString(), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            ((MainActivity)getActivity()).navigateToFragment(new ItemFragment());
+
         }
     }
 }
