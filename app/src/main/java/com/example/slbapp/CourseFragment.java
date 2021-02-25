@@ -23,6 +23,8 @@ import com.example.slbapp.ui.main.ItemFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link CourseFragment#newInstance} factory method to
@@ -43,6 +45,8 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
     TextInputLayout period;
     TextInputLayout notes;
     Button button;
+    ArrayList<String> allCourseNames;
+    CourseValidationHandler validator = new CourseValidationHandler();
 
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
@@ -51,7 +55,6 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            CourseValidationHandler validator = new CourseValidationHandler();
 
             String courseNameInput = courseName.getEditText().getText().toString().trim();
             String yearInput = year.getEditText().getText().toString().trim();
@@ -59,22 +62,15 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
             String gradeInput = grade.getEditText().getText().toString().trim();
             String periodInput = period.getEditText().getText().toString().trim();
 
-
-
-
             // validate inputs
 
-//            button.setEnabled(!courseNameInput.isEmpty() && !yearInput.isEmpty() &&
-//                    !ectsInput.isEmpty() && !gradeInput.isEmpty() && !periodInput.isEmpty());
-
-            courseName = validator.validateCourseName(courseName, courseNameInput);
+            courseName = validator.validateCourseName(courseName, courseNameInput, allCourseNames);
             year = validator.validateYear(year, yearInput);
             ects = validator.validateEcts(ects, ectsInput);
             grade = validator.validateGrade(grade, gradeInput);
             period = validator.validateYear(period, periodInput);
 
-            button.setEnabled(!courseNameInput.isEmpty() &&
-                    TextUtils.isEmpty(courseName.getError()) &&
+            button.setEnabled(TextUtils.isEmpty(courseName.getError()) &&
                     TextUtils.isEmpty(year.getError()) &&
                     TextUtils.isEmpty(ects.getError()) &&
                     TextUtils.isEmpty(grade.getError()) &&
@@ -126,8 +122,9 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
 //        ((MainActivity)getActivity()).setupTextViewsCourseFragment(course);
         Log.d("onViewCreated", "is het hier");
         setupButtons();
-        setupTextInput();
+        setupTextInputs();
         setupSpinner();
+        allCourseNames = ((MainActivity)getActivity()).getAllCourseNames();
 
     }
 
@@ -161,7 +158,7 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
         }
     }
 
-    private void setupTextInput() {
+    private void setupTextInputs() {
 
         Log.d("setupTextViews", "test");
 
@@ -222,15 +219,12 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
             Snackbar.make(getView(), "added Course: " +
                     courseName.getEditText().getText().toString(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
-            ((MainActivity)getActivity()).navigateToFragment(new ItemFragment());
-
         } else {
             ((MainActivity)getActivity()).updateCourseToDatabase(tempCourse);
             Snackbar.make(getView(), "updated Course: " +
                     courseName.getEditText().getText().toString(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
-            ((MainActivity)getActivity()).navigateToFragment(new ItemFragment());
-
         }
+        ((MainActivity)getActivity()).navigateToFragment(new ItemFragment());
     }
 }

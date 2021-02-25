@@ -2,84 +2,97 @@ package com.example.slbapp;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+
 public class CourseValidationHandler {
 
+    public TextInputLayout validateCourseName(TextInputLayout courseName, String courseNameInput, ArrayList<String> allCourseNames) {
+        if (courseName.hasFocus()) {
+            if(courseNameInput.isEmpty()) {
+                courseName.setError("Fields can't be empty");
+            } else if(allCourseNames.contains(courseNameInput)) {
+                courseName.setError("Course already exists");
+            } else {
+                courseName.setError(null);
+            }
 
-    public TextInputLayout validateCourseName(TextInputLayout courseName, String courseNameInput) {
-
-        if(courseNameInput.isEmpty()) {
-            courseName.setError("Fields can't be empty");
-        } else {
-            courseName.setError(null);
         }
-
         return courseName;
+
     }
 
     public TextInputLayout validateYear(TextInputLayout year, String yearInput) {
 
-        if(yearInput.isEmpty()) {
-            year.setError("Fields can't be empty");
-        } else {
-
-            int num = Integer.parseInt(yearInput);
-
-            if(num > 4) {
-                year.setError("number cannot be higher than 4");
-            } else if(num < 1) {
-                year.setError("number cannot be lower than 1");
+        if(year.hasFocus()) {
+            if(yearInput.isEmpty()) {
+                year.setError("Fields can't be empty");
             } else {
-                year.setError(null);
+
+                int num = Integer.parseInt(yearInput);
+
+                if(num > 4) {
+                    year.setError("number cannot be higher than 4");
+                } else if(num < 1) {
+                    year.setError("number cannot be lower than 1");
+                } else {
+                    year.setError(null);
+                }
             }
         }
-
         return year;
+
     }
 
     public TextInputLayout validateEcts(TextInputLayout ects, String ectsInput) {
 
-        if(ectsInput.isEmpty()) {
-            ects.setError("Fields can't be empty");
-        } else {
-
-            int num = Integer.parseInt(ectsInput);
-
-            if(num < 1) {
-                ects.setError("number cannot be lower than 1");
+        if(ects.hasFocus()) {
+            if(ectsInput.isEmpty()) {
+                ects.setError("Fields can't be empty");
             } else {
-                ects.setError(null);
+
+                int num = Integer.parseInt(ectsInput);
+
+                if(num < 1) {
+                    ects.setError("number cannot be lower than 1");
+                } else {
+                    ects.setError(null);
+                }
             }
         }
-
         return ects;
+
     }
 
     public TextInputLayout validateGrade(TextInputLayout grade, String gradeInput) {
 
-        if(gradeInput.isEmpty()) {
-            grade.setError("Fields can't be empty");
-        } else if(gradeInput.equals("V") || gradeInput.equals("O")) {
-            grade.setError(null);
-        } else {
+        if(grade.hasFocus()) {
+            if(gradeInput.isEmpty()) {
+                grade.setError("Fields can't be empty");
+            } else if(gradeInput.equals("V") || gradeInput.equals("O")) {
+                grade.setError(null);
+            } else {
 
-            try {
-                double num = Double.parseDouble(gradeInput);
+                try {
+                    double num = Double.parseDouble(gradeInput);
 
-                if(num < 1) {
-                    grade.setError("number cannot be lower than 1");
-                } else if(num > 10) {
-                    grade.setError("number cannot be higher than 10");
-                } else {
-                    grade.setError(null);
+                    if(num < 1) {
+                        grade.setError("number cannot be lower than 1");
+                    } else if(num > 10) {
+                        grade.setError("number cannot be higher than 10");
+                    } else if((new BigDecimal(gradeInput).scale() > 1)) {
+                        grade.setError("number cannot have more than 1 decimal");
+                    } else {
+                        grade.setError(null);
+                    }
+
+                } catch (NumberFormatException e) {
+                    grade.setError("only 'V' or 'O' or a number between 1 and 10");
                 }
-
-            } catch (NumberFormatException e) {
-                grade.setError("only 'V' or 'O' or a number between 1 and 10");
             }
-
         }
-
         return grade;
+
     }
 
 }

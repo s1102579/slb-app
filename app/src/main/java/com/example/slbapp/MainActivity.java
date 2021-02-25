@@ -186,6 +186,16 @@ public class MainActivity extends AppCompatActivity {
         return allCourses;
     }
 
+    public ArrayList<String> getAllCourseNames() {
+        ArrayList<String> allCourseNames = new ArrayList<>();
+
+        for(int i = 0; i < allCourses.size(); i++) {
+            allCourseNames.add(allCourses.get(i).getName());
+        }
+
+        return allCourseNames;
+    }
+
     public void setAllCourses(ArrayList<Course> courses) {
         this.allCourses = courses;
     }
