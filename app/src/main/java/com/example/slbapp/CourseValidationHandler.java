@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class CourseValidationHandler {
 
     public TextInputLayout validateCourseName(TextInputLayout courseName, String courseNameInput, ArrayList<String> allCourseNames) {
+
         if (courseName.hasFocus()) {
             if(courseNameInput.isEmpty()) {
                 courseName.setError("Fields can't be empty");
@@ -16,31 +17,30 @@ public class CourseValidationHandler {
             } else {
                 courseName.setError(null);
             }
-
         }
         return courseName;
 
     }
 
-    public TextInputLayout validateYear(TextInputLayout year, String yearInput) {
+    public TextInputLayout validateYearOrPeriod(TextInputLayout yearOrPeriod, String yearOrPeriodInput) {
 
-        if(year.hasFocus()) {
-            if(yearInput.isEmpty()) {
-                year.setError("Fields can't be empty");
+        if(yearOrPeriod.hasFocus()) {
+            if(yearOrPeriodInput.isEmpty()) {
+                yearOrPeriod.setError("Fields can't be empty");
             } else {
 
-                int num = Integer.parseInt(yearInput);
+                int num = Integer.parseInt(yearOrPeriodInput);
 
                 if(num > 4) {
-                    year.setError("number cannot be higher than 4");
+                    yearOrPeriod.setError("number cannot be higher than 4");
                 } else if(num < 1) {
-                    year.setError("number cannot be lower than 1");
+                    yearOrPeriod.setError("number cannot be lower than 1");
                 } else {
-                    year.setError(null);
+                    yearOrPeriod.setError(null);
                 }
             }
         }
-        return year;
+        return yearOrPeriod;
 
     }
 

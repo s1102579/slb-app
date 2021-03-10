@@ -50,8 +50,7 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
 
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -63,26 +62,26 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
             String periodInput = period.getEditText().getText().toString().trim();
 
             // validate inputs
-
             courseName = validator.validateCourseName(courseName, courseNameInput, allCourseNames);
-            year = validator.validateYear(year, yearInput);
+            year = validator.validateYearOrPeriod(year, yearInput);
             ects = validator.validateEcts(ects, ectsInput);
             grade = validator.validateGrade(grade, gradeInput);
-            period = validator.validateYear(period, periodInput);
+            period = validator.validateYearOrPeriod(period, periodInput);
 
             button.setEnabled(TextUtils.isEmpty(courseName.getError()) &&
                     TextUtils.isEmpty(year.getError()) &&
                     TextUtils.isEmpty(ects.getError()) &&
                     TextUtils.isEmpty(grade.getError()) &&
-                    TextUtils.isEmpty(period.getError()));
-
+                    TextUtils.isEmpty(period.getError()) &&
+                    !courseNameInput.isEmpty() &&
+                    !yearInput.isEmpty() &&
+                    !ectsInput.isEmpty() &&
+                    !gradeInput.isEmpty() &&
+                    !periodInput.isEmpty());
         }
 
         @Override
-        public void afterTextChanged(Editable s) {
-
-
-        }
+        public void afterTextChanged(Editable s) {}
     };
 
 

@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
-// verwijdert Courses tabel uit database
+//      verwijdert Courses tabel uit database
 //        DatabaseHelper dbHelper = DatabaseHelper.getHelper(this);
 //        dbHelper.dropCourses(mSQLDB);
 
@@ -302,29 +302,5 @@ public class MainActivity extends AppCompatActivity {
         return courses;
     }
 
-
-//    public void setupTextViewsCourseFragment(Course course) {
-//
-//        Log.d("course name: ", course.getName());
-//
-//        TextView courseName = (TextInputEditText) findViewById(R.id.text_input_course);
-//        TextView year = (TextInputEditText) findViewById(R.id.text_input_year);
-//        TextView ects = (TextInputEditText) findViewById(R.id.text_input_ects);
-//        TextView isOptional = (TextInputEditText) findViewById(R.id.text_input_isOptional);
-//        TextView period = (TextInputEditText) findViewById(R.id.text_input_period);
-//        TextView notes = (TextInputEditText) findViewById(R.id.text_input_notes);
-//
-//        courseName.setText(course.getName());
-//        year.setText(course.getYear());
-//        ects.setText(course.getEcts());
-//        period.setText(course.getPeriod());
-//        notes.setText(course.getNotes());
-//
-//        if (course.isOptional()) {
-//            isOptional.setText("keuzevak");
-//        } else {
-//            isOptional.setText("verplicht vak");
-//        }
-//    }
 
 }
