@@ -38,15 +38,15 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
     private Course course = new Course();
     private boolean courseIsEmpty = false;
 
-    TextInputLayout courseName;
-    TextInputLayout year;
-    TextInputLayout ects;
-    TextInputLayout grade;
-    TextInputLayout period;
-    TextInputLayout notes;
-    Button button;
-    ArrayList<String> allCourseNames;
-    CourseValidationHandler validator = new CourseValidationHandler();
+    private TextInputLayout courseName;
+    private TextInputLayout year;
+    private TextInputLayout ects;
+    private TextInputLayout grade;
+    private TextInputLayout period;
+    private TextInputLayout notes;
+    private Button button;
+    private ArrayList<String> allCourseNames;
+    private CourseValidationHandler validator = new CourseValidationHandler();
 
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
