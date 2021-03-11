@@ -216,6 +216,31 @@ public class MainActivity extends AppCompatActivity {
         return getFilteredCourses().get(position);
     }
 
+    public int getPointsFromFinishedCourses() {
+        int punten = 0;
+
+        for (Course course : allCourses) {
+
+            int coursePoints = Integer.parseInt(course.getEcts());
+            try {
+                double num = Double.parseDouble(course.getGrade());
+
+                if(num >= 5.5) {
+
+                    punten += coursePoints;
+                }
+
+            } catch (NumberFormatException e) {
+                if (course.getGrade().equals("V")) {
+                    punten += coursePoints;
+                }
+            }
+
+        }
+
+        return punten;
+    }
+
     //    public Course getCourse(int position) {
 //        return getCoursesFromDatabase().get(position);
 //    }
