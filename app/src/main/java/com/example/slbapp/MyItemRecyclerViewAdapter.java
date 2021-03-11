@@ -84,7 +84,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         protected void publishResults(CharSequence constraint, FilterResults filterResults) {
             courses.clear();
             courses.addAll((Collection<? extends Course>)filterResults.values);
-            MainActivity.getInstance().setFilteredCourses(courses);
+            MainActivity.getInstance().coursesStore.setFilteredCourses(courses);
             notifyDataSetChanged();
         }
     };

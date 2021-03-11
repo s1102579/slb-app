@@ -103,7 +103,7 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
         if (getArguments() != null) {
             Log.d("onCreate", "CourseFragment onCreate if statement");
             position = getArguments().getInt(ARG_POSITION);
-            course = ((MainActivity)getActivity()).getFilteredCourse(position);
+            course = ((MainActivity)getActivity()).coursesStore.getFilteredCourse(position);
         }
 
     }
@@ -123,7 +123,7 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
         setupButtons();
         setupTextInputs();
         setupSpinner();
-        allCourseNames = ((MainActivity)getActivity()).getAllCourseNames();
+        allCourseNames = ((MainActivity)getActivity()).coursesStore.getAllCourseNames();
 
     }
 
@@ -214,12 +214,12 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
                 notes.getEditText().getText().toString());
 
         if(courseIsEmpty) {
-            ((MainActivity)getActivity()).addCourseToDatabase(tempCourse);
+            ((MainActivity)getActivity()).coursesStore.addCourseToDatabase(tempCourse);
             Snackbar.make(getView(), "added Course: " +
                     courseName.getEditText().getText().toString(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         } else {
-            ((MainActivity)getActivity()).updateCourseToDatabase(tempCourse);
+            ((MainActivity)getActivity()).coursesStore.updateCourseToDatabase(tempCourse);
             Snackbar.make(getView(), "updated Course: " +
                     courseName.getEditText().getText().toString(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();

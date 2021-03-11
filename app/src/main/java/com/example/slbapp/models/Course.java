@@ -34,10 +34,6 @@ public class Course {
         return period;
     }
 
-    public void setPeriod(String period) {
-        this.period = period;
-    }
-
     public String getName() {
         return name;
     }
@@ -50,24 +46,12 @@ public class Course {
         return ects;
     }
 
-    public void setEcts(String ects) {
-        this.ects = ects;
-    }
-
     public String getGrade() {
         return grade;
     }
 
-    public void setGrade(String grade) {
-        this.grade = grade;
-    }
-
     public String getYear() {
         return year;
-    }
-
-    public void setYear(String year) {
-        this.year = year;
     }
 
     public boolean isOptional() {
@@ -82,8 +66,5 @@ public class Course {
         return notes;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
 
 }
