@@ -8,16 +8,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.example.slbapp.MainActivity;
 import com.example.slbapp.R;
-import com.example.slbapp.models.Course;
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
@@ -47,16 +43,11 @@ public class MainFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-//        Course course = new Course("2016", "1","IOPR1", "3",true, "7", "android ontwikkeling");
-//        ((MainActivity)getActivity()).addCourseToDatabase(course);
-//        ((MainActivity)getActivity()).getCoursesFromDatabase();
-        // TODO: Use the ViewModel
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        setupButtons();
         makePieChart();
 
     }
@@ -84,16 +75,4 @@ public class MainFragment extends Fragment {
         legend.setWordWrapEnabled(true);
         chart.animateXY(750, 750);
     }
-
-//    private void setupButtons() {
-//        // navigates naar list fragment
-//        Button button = (Button) getView().findViewById(R.id.button);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d("knop ingedrukt", "Navigeer naar CourseListActivity");
-//                ((MainActivity)getActivity()).navigateToFragment(new ItemFragment());
-//            }
-//        });
-//    }
 }

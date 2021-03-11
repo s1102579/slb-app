@@ -57,20 +57,8 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
-        // Write a message to the database
-
         setupFirebaseDatabase();
 
-
-//      verwijdert Courses tabel uit database
-//        DatabaseHelper dbHelper = DatabaseHelper.getHelper(this);
-//        dbHelper.dropCourses(mSQLDB);
-
-
-//        Course course = new Course("2016", "1","IOPR1", "3",true, "7", "android ontwikkeling");
-//        addCourseToDatabase(course);
-
-//        getFromDatabase();
     }
 
     public static MainActivity getInstance() {
@@ -103,16 +91,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupFirebaseDatabase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://slb-app-2a31b-default-rtdb.europe-west1.firebasedatabase.app/");
-        DatabaseReference myRef = database.getReference("message");
+        DatabaseReference myRef = database.getReference("courses");
 
-        // read value from database
+        // read courses from fireBase
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-                Log.d("read firebase", "Value is: " + value);
+                ArrayList<Course> courses = new ArrayList<>();
+                for (DataSnapshot courseSnapshot : dataSnapshot.getChildren()) {
+                    Course course = courseSnapshot.getValue(Course.class);
+                    courses.add(course);
+                }
+                String firstCourse = courses.get(0).getName();
+                Log.d("read firebase", "course is: " + firstCourse);
             }
 
             @Override
@@ -274,9 +267,6 @@ public class MainActivity extends AppCompatActivity {
         return punten;
     }
 
-    //    public Course getCourse(int position) {
-//        return getCoursesFromDatabase().get(position);
-//    }
 
     public void navigateToFragment(Fragment fragment) {
 
@@ -288,16 +278,7 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack("name") // name can be null
                 .commit();
 
-
-        // navigation component manier NOG NIET WERKEND
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        NavHostFragment navHostFragment =
-//                (NavHostFragment) fragmentManager.findFragmentById(fragment.getId());
-//        NavController navController = navHostFragment.getNavController();
-
     }
-
-
 
     public ArrayList<String> getCourseNamesFromDatabase() {
         DatabaseHelper dbHelper = DatabaseHelper.getHelper(this);

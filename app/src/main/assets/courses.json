@@ -1,3 +1,4 @@
+{"courses": 
 [
   {"year":"1","period": "1","name":"IARCH","ects": "3","isOptional":"false","grade": "1","notes": "architectuur vak"},
   {"year":"1","period": "1","name":"IIBPM","ects": "3","isOptional":"false","grade": "1","notes": "..."},
@@ -19,3 +20,4 @@
   {"year":"1","period": "4","name":"ISLP","ects": "3","isOptional":"false","grade": "1","notes": "..."},
   {"year":"1","period": "4","name":"IPSEN","ects": "3","isOptional":"false","grade": "1","notes": "software engineer eind project propedeuse"}
 ]
+}
