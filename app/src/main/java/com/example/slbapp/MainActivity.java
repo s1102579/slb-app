@@ -21,6 +21,11 @@ import com.example.slbapp.ui.main.MainFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -51,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+
+        // Write a message to the database
+
+        setupFirebaseDatabase();
+
 
 //      verwijdert Courses tabel uit database
 //        DatabaseHelper dbHelper = DatabaseHelper.getHelper(this);
@@ -90,6 +100,29 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
             };
+
+    private void setupFirebaseDatabase() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://slb-app-2a31b-default-rtdb.europe-west1.firebasedatabase.app/");
+        DatabaseReference myRef = database.getReference("message");
+
+        // read value from database
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                String value = dataSnapshot.getValue(String.class);
+                Log.d("read firebase", "Value is: " + value);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("read fireBase failed", "Failed to read value.", error.toException());
+            }
+        });
+
+    }
 
     public void addCourseToDatabase(Course course) {
 

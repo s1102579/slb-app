@@ -59,7 +59,6 @@ public class MainFragment extends Fragment {
 //        setupButtons();
         makePieChart();
 
-
     }
 
     private void makePieChart() {
