@@ -211,7 +211,8 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
                 notes.getEditText().getText().toString());
 
         if(courseIsEmpty) {
-            ((MainActivity)getActivity()).coursesStore.addCourseToDatabase(tempCourse);
+//            ((MainActivity)getActivity()).coursesStore.addCourseToDatabase(tempCourse);
+            ((MainActivity)getActivity()).coursesStore.addCourseToFireBase(tempCourse);
             Snackbar.make(getView(), "added Course: " +
                     courseName.getEditText().getText().toString(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();

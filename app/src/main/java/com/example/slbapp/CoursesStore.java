@@ -1,6 +1,5 @@
 package com.example.slbapp;
 
-import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -9,33 +8,37 @@ import android.util.Log;
 import com.example.slbapp.database.DatabaseHelper;
 import com.example.slbapp.database.DatabaseInfo;
 import com.example.slbapp.models.Course;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CoursesStore {
 
-    private ArrayList<Course> allCourses;
+    private ArrayList<Course> allCourses = new ArrayList<>();
     private List<Course> filteredCourses = new ArrayList<>();
+    private ArrayList<Course> firebaseCourses = new ArrayList<>();
     private Context context;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
 
     public CoursesStore(Context context) {
         this.context = context;
-
         setupFirebaseDatabase();
+
         allCourses = getCoursesFromDatabase();
         setFilteredCourses(allCourses);
+
+        if(allCourses.size() == 0) {
+            handleEmptyDatabase();
+        }
+
     }
 
     private void setupFirebaseDatabase() {
@@ -43,20 +46,25 @@ public class CoursesStore {
         myRef = database.getReference("courses");
     }
 
-    private ArrayList<Course> getCoursesFromFirebase() {
-        ArrayList<Course> courses = new ArrayList<>();
+    private void handleEmptyDatabase() {
         // read courses from fireBase
         myRef.addValueEventListener(new ValueEventListener() {
+
+            // LETOP DIT MOET WACHTEN OP DE DATA VAN FIREBASE EN IS ASYNCHRONOUS
+            // https://stackoverflow.com/questions/47847694/how-to-return-datasnapshot-value-as-a-result-of-a-method/47853774
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 for (DataSnapshot courseSnapshot : dataSnapshot.getChildren()) {
                     Course course = courseSnapshot.getValue(Course.class);
-                    courses.add(course);
+                    addCourseToDatabase(course);
+                    Log.d("read firebase", "course is: " + course.getName());
                 }
-                String firstCourse = courses.get(0).getName();
-                Log.d("read firebase", "course is: " + firstCourse);
+
+                allCourses = getCoursesFromDatabase();
+                setFilteredCourses(allCourses);
+
             }
 
             @Override
@@ -65,8 +73,17 @@ public class CoursesStore {
                 Log.w("read fireBase failed", "Failed to read value.", error.toException());
             }
         });
+    }
 
-        return courses;
+    public void addCourseToFireBase(Course course) {
+        DatabaseReference coursesRef = myRef.child(course.getName());
+        coursesRef.setValue(course);
+    }
+
+    private void addAllCoursesToFirebase(ArrayList<Course> courses) {
+        for (Course course: courses) {
+            addCourseToFireBase(course);
+        }
     }
 
     public ArrayList<Course> getCourses() {
