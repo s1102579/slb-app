@@ -85,9 +85,7 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
     };
 
 
-    public CourseFragment() {
-        // Required empty public constructor
-    }
+    public CourseFragment() {}
 
     public static CourseFragment newInstance(int position) {
         CourseFragment fragment = new CourseFragment();
@@ -118,8 +116,7 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        ((MainActivity)getActivity()).setupTextViewsCourseFragment(course);
-        Log.d("onViewCreated", "is het hier");
+
         setupButtons();
         setupTextInputs();
         setupSpinner();

@@ -10,6 +10,11 @@ import com.example.slbapp.database.DatabaseHelper;
 import com.example.slbapp.database.DatabaseInfo;
 import com.example.slbapp.models.Course;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -22,12 +27,46 @@ public class CoursesStore {
     private ArrayList<Course> allCourses;
     private List<Course> filteredCourses = new ArrayList<>();
     private Context context;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
 
     public CoursesStore(Context context) {
         this.context = context;
 
+        setupFirebaseDatabase();
         allCourses = getCoursesFromDatabase();
         setFilteredCourses(allCourses);
+    }
+
+    private void setupFirebaseDatabase() {
+        database = FirebaseDatabase.getInstance("https://slb-app-2a31b-default-rtdb.europe-west1.firebasedatabase.app/");
+        myRef = database.getReference("courses");
+    }
+
+    private ArrayList<Course> getCoursesFromFirebase() {
+        ArrayList<Course> courses = new ArrayList<>();
+        // read courses from fireBase
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                for (DataSnapshot courseSnapshot : dataSnapshot.getChildren()) {
+                    Course course = courseSnapshot.getValue(Course.class);
+                    courses.add(course);
+                }
+                String firstCourse = courses.get(0).getName();
+                Log.d("read firebase", "course is: " + firstCourse);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("read fireBase failed", "Failed to read value.", error.toException());
+            }
+        });
+
+        return courses;
     }
 
     public ArrayList<Course> getCourses() {
@@ -90,7 +129,6 @@ public class CoursesStore {
     }
 
     public void addCourseToDatabase(Course course) {
-
         DatabaseHelper dbHelper = DatabaseHelper.getHelper(context);
 
         ContentValues values = new ContentValues();

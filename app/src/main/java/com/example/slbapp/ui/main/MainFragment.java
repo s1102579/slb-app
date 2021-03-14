@@ -57,7 +57,7 @@ public class MainFragment extends Fragment {
         PieChart chart = (PieChart) getView().findViewById(R.id.chart);
 
         int totalPointsSuccess = ((MainActivity)getActivity()).coursesStore.getPointsFromFinishedCourses();
-        int totalPointsFail = 240 - totalPointsSuccess;
+        int totalPointsFail = 210 - totalPointsSuccess;
 
         pieEntries = new ArrayList<>();
         pieEntries.add(new PieEntry(totalPointsSuccess, "gehaald"));

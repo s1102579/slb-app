@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
-        setupFirebaseDatabase();
-
     }
 
     public static MainActivity getInstance() {
@@ -86,33 +84,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
-    private void setupFirebaseDatabase() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://slb-app-2a31b-default-rtdb.europe-west1.firebasedatabase.app/");
-        DatabaseReference myRef = database.getReference("courses");
-
-        // read courses from fireBase
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                ArrayList<Course> courses = new ArrayList<>();
-                for (DataSnapshot courseSnapshot : dataSnapshot.getChildren()) {
-                    Course course = courseSnapshot.getValue(Course.class);
-                    courses.add(course);
-                }
-                String firstCourse = courses.get(0).getName();
-                Log.d("read firebase", "course is: " + firstCourse);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("read fireBase failed", "Failed to read value.", error.toException());
-            }
-        });
-
-    }
 
     public void navigateToFragment(Fragment fragment) {
 
