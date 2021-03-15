@@ -23,22 +23,22 @@ public class CoursesStore {
 
     private ArrayList<Course> allCourses = new ArrayList<>();
     private List<Course> filteredCourses = new ArrayList<>();
-    private ArrayList<Course> firebaseCourses = new ArrayList<>();
     private Context context;
+    private CoursesCallback coursesCallback;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
 
-    public CoursesStore(Context context) {
-        this.context = context;
+    public CoursesStore(Context context, CoursesCallback coursesCallback) {
         setupFirebaseDatabase();
+        setupPrivateVariables(context, coursesCallback);
+        handleEmptyDatabase();
+    }
 
+    private void setupPrivateVariables(Context context, CoursesCallback coursesCallback) {
+        this.context = context;
+        this.coursesCallback = coursesCallback;
         allCourses = getCoursesFromDatabase();
         setFilteredCourses(allCourses);
-
-        if(allCourses.size() == 0) {
-            handleEmptyDatabase();
-        }
-
     }
 
     private void setupFirebaseDatabase() {
@@ -47,7 +47,19 @@ public class CoursesStore {
     }
 
     private void handleEmptyDatabase() {
+
+        if(allCourses.size() == 0) {
+            getCoursesFromFirebase();
+        }
+        else {
+            coursesCallback.onCallback(allCourses);
+        }
+
+    }
+
+    private void getCoursesFromFirebase() {
         // read courses from fireBase
+        ArrayList<Course> courses = new ArrayList<Course>();
         myRef.addValueEventListener(new ValueEventListener() {
 
             // LETOP DIT MOET WACHTEN OP DE DATA VAN FIREBASE EN IS ASYNCHRONOUS
@@ -59,12 +71,13 @@ public class CoursesStore {
                 for (DataSnapshot courseSnapshot : dataSnapshot.getChildren()) {
                     Course course = courseSnapshot.getValue(Course.class);
                     addCourseToDatabase(course);
+                    courses.add(course);
                     Log.d("read firebase", "course is: " + course.getName());
                 }
-
+                coursesCallback.onCallback(courses);
+                Log.d("test Async", "test");
                 allCourses = getCoursesFromDatabase();
                 setFilteredCourses(allCourses);
-
             }
 
             @Override
@@ -159,8 +172,11 @@ public class CoursesStore {
 
         dbHelper.insert(DatabaseInfo.CourseTables.COURSETABLE, null, values);
 
-        setAllCourses(getCoursesFromDatabase());
-        setFilteredCourses(allCourses);
+        this.allCourses.add(course);
+        this.filteredCourses.add(course);
+
+//        setAllCourses(getCoursesFromDatabase());
+//        setFilteredCourses(allCourses);
 
     }
 
@@ -176,11 +192,11 @@ public class CoursesStore {
         values.put(DatabaseInfo.CourseColumn.GRADE, course.getGrade());
         values.put(DatabaseInfo.CourseColumn.NOTES, course.getNotes());
 
-
         Log.d("name_value", values.get("name").toString());
 
         dbHelper.update(DatabaseInfo.CourseTables.COURSETABLE, values);
 
+        //TODO moet nog veranderen net zoals bij addCourseToDatabase
         setAllCourses(getCoursesFromDatabase());
         setFilteredCourses(allCourses);
 
@@ -269,7 +285,7 @@ public class CoursesStore {
                 null, null, null, null, null);
 
         ArrayList<Course> courses = new ArrayList<>();
-        if(rs.moveToFirst()) {
+        if (rs.moveToFirst()) {
             while (!rs.isAfterLast()) {
                 String year = (String) rs.getString(rs.getColumnIndex("year"));
                 String period = (String) rs.getString(rs.getColumnIndex("period"));

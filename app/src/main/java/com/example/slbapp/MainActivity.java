@@ -41,49 +41,63 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, MainFragment.newInstance())
-                    .commitNow();
-            instance = this;
-        }
-
-        coursesStore = new CoursesStore(this);
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
-
+        setupFragment(savedInstanceState);
     }
 
     public static MainActivity getInstance() {
         return instance;
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment selectedFragment = null;
+    private void setupFragment(Bundle savedInstanceState) {
+        setContentView(R.layout.main_activity);
 
-                    switch(item.getItemId()) {
-                        case R.id.nav_home:
-                            selectedFragment = new MainFragment();
-                            break;
-                        case R.id.nav_courses:
-                            selectedFragment = new ItemFragment();
-                            break;
-                        case R.id.nav_addCourse:
-                            selectedFragment = new CourseFragment();
-                            break;
+        if (savedInstanceState == null) {
+            setupCoursesStore();
+            setupBottomNavigation();
+        }
+    }
+
+    private void setupCoursesStore() {
+        coursesStore = new CoursesStore(this, new CoursesCallback() {
+            @Override
+            public void onCallback(ArrayList<Course> courses) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, MainFragment.newInstance())
+                        .commitNow();
+                instance = getInstance();
+            }
+        });
+    }
+
+    private void setupBottomNavigation() {
+
+        BottomNavigationView.OnNavigationItemSelectedListener navListener =
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        Fragment selectedFragment = null;
+
+                        switch(item.getItemId()) {
+                            case R.id.nav_home:
+                                selectedFragment = MainFragment.newInstance();
+                                break;
+                            case R.id.nav_courses:
+                                selectedFragment = new ItemFragment();
+                                break;
+                            case R.id.nav_addCourse:
+                                selectedFragment = new CourseFragment();
+                                break;
+                        }
+
+                        navigateToFragment(selectedFragment);
+
+                        return true;
                     }
+                };
 
-                    navigateToFragment(selectedFragment);
-
-                    return true;
-                }
-            };
-
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+    }
 
     public void navigateToFragment(Fragment fragment) {
 
@@ -96,8 +110,5 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
 
     }
-
-
-
 
 }

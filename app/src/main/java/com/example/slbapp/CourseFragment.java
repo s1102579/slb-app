@@ -199,7 +199,6 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
         });
     }
 
-
     private void saveButtonHandler() {
 
         Course tempCourse = new Course(year.getEditText().getText().toString(),

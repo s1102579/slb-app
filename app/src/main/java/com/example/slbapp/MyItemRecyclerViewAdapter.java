@@ -28,7 +28,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     private List<Course> allCourses;
 
     public MyItemRecyclerViewAdapter(List<Course> courses) {
-
         this.courses = courses;
         this.allCourses = new ArrayList<>(courses);
     }
