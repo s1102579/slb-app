@@ -1,5 +1,7 @@
 package com.example.slbapp.database;
 
+import java.util.Date;
+
 public class DatabaseInfo {
 
     public class CourseTables {
@@ -14,5 +16,13 @@ public class DatabaseInfo {
         public static final String GRADE = "grade";	//
         public static final String ISOPTIONAL = "isOptional";
         public static final String NOTES = "notes";
+    }
+
+    public class DateTables {
+        public static final String DATETABLE = "DateTable";
+    }
+
+    public class DateColumn {
+        public static final String DATE_UPDATED = "DateUpdated";
     }
 }

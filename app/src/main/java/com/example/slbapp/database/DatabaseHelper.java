@@ -11,7 +11,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static SQLiteDatabase mSQLDB;
     private static com.example.slbapp.database.DatabaseHelper mInstance;
     public static final String dbName = "course.db";
-    public static final int dbVersion = 2;		// Versie nr van je db.
+    public static final int dbVersion = 9;		// Versie nr van je db.
 
     private DatabaseHelper(Context ctx) {
         super(ctx, dbName, null, dbVersion);	// gebruik de super constructor.
@@ -39,8 +39,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 com.example.slbapp.database.DatabaseInfo.CourseColumn.GRADE + " TEXT," +
                 com.example.slbapp.database.DatabaseInfo.CourseColumn.NOTES + " TEXT);"
         );
+
+
+        db.execSQL("CREATE TABLE " + com.example.slbapp.database.DatabaseInfo.DateTables.DATETABLE + " (" +
+                BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                DatabaseInfo.DateColumn.DATE_UPDATED + " TEXT);"
+        );
+
+        db.execSQL("     CREATE TRIGGER dateTable_no_insert" +
+                "        BEFORE INSERT ON DATETABLE" +
+                "        WHEN (SELECT COUNT(*) FROM DATETABLE) >= 1" +
+                "        BEGIN" +
+                "        SELECT RAISE(FAIL, 'only one row!');" +
+                "        END;"
+        );
     }
-    // CREATE TABLE CarTable (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, ects TEXT, grade TEXT);
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -63,6 +76,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void update(String table, ContentValues values){
         mSQLDB.update(table, values, "name = ?", new String[]{values.get("name").toString()});
+    }
+
+    public void updateDate(String table, ContentValues values){
+        mSQLDB.update(table, values, "_id = ?", new String[]{values.get("_id").toString()});
     }
 
     public Cursor query(String table, String[] columns, String selection, String[] selectArgs, String groupBy, String having, String orderBy){
