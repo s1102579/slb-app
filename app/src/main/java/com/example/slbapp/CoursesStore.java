@@ -29,10 +29,12 @@ public class CoursesStore {
     private CoursesCallback coursesCallback;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
+    private DateService dateService;
 
     public CoursesStore(Context context, CoursesCallback coursesCallback) {
         setupFirebaseDatabase();
         setupPrivateVariables(context, coursesCallback);
+        setupDateService();
         handleEmptyDatabase();
     }
 
@@ -55,6 +57,29 @@ public class CoursesStore {
         }
         else {
             coursesCallback.onCallback(allCourses);
+        }
+
+    }
+
+    private void setupDateService() {
+        dateService = new DateService(context, new DateCallback() {
+            @Override
+            public void onCallback(long dateUpdated) {
+                handleOutdatedLocalDatabase();
+            }
+        });
+    }
+
+
+    public void handleOutdatedLocalDatabase() {
+
+        // TODO zorg dat als database ouder is als firebase dan update lokale firebase
+
+        if (dateService.isDatabaseOutdated()) {
+            Log.d("isDatabaseOutdated", "true");
+        }
+        else {
+            Log.d("isDatabaseOutdated", "false");
         }
 
     }

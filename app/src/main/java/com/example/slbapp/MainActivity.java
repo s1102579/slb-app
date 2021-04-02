@@ -36,7 +36,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     public static SQLiteDatabase mSQLDB;
     public CoursesStore coursesStore;
-    public DateService dateService;
     private static MainActivity instance;
 
     @Override
@@ -55,15 +54,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             setupCoursesStore();
             setupBottomNavigation();
-            setupDateService();
         }
-    }
-
-    private void setupDateService() {
-        dateService = new DateService(this);
-
-//        dateService.setDateInDatabase();
-        dateService.updateDateInDatabase();
     }
 
     private void setupCoursesStore() {

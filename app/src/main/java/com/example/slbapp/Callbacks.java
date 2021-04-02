@@ -4,6 +4,10 @@ import com.example.slbapp.models.Course;
 
 import java.util.ArrayList;
 
-public interface CoursesCallback {
+interface CoursesCallback {
     void onCallback(ArrayList<Course> courses);
+}
+
+interface DateCallback {
+    void onCallback(long dateUpdated);
 }
