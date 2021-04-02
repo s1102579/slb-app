@@ -3,6 +3,7 @@ package com.example.slbapp;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.provider.BaseColumns;
 import android.util.Log;
 
@@ -46,13 +47,12 @@ public class DateService {
 
     }
 
-    public void updateDateInDatabase() {
+    public void updateDateInDatabase(long date) {
         DatabaseHelper dbHelper = DatabaseHelper.getHelper(context);
 
         ContentValues values = new ContentValues();
-        long currentDate = new Date().getTime();
         values.put(BaseColumns._ID, 1);
-        values.put(DatabaseInfo.DateColumn.DATE_UPDATED, String.valueOf(currentDate));
+        values.put(DatabaseInfo.DateColumn.DATE_UPDATED, String.valueOf(date));
 
         dbHelper.updateDate(DatabaseInfo.DateTables.DATETABLE, values);
     }
@@ -89,23 +89,40 @@ public class DateService {
         });
     }
 
+    public long getDateUpdated() {
+        return dateUpdated;
+    }
+
     public long getDateUpdatedFromDatabase() {
         DatabaseHelper dbHelper = DatabaseHelper.getHelper(context);
 
         Cursor rs = dbHelper.query(DatabaseInfo.DateTables.DATETABLE, new String[]{"*"},
                 null, null, null, null, null);
 
-        rs.moveToFirst();
-        long dateUpdatedDatabase = Long.parseLong(rs.getString(rs.getColumnIndex("DateUpdated")));
-        Log.d("dateUpdated_database", String.valueOf(dateUpdatedDatabase));
+        try {
+            rs.moveToFirst();
+            long dateUpdatedDatabase = Long.parseLong(rs.getString(rs.getColumnIndex("DateUpdated")));
+            Log.d("dateUpdated_database", String.valueOf(dateUpdatedDatabase));
 
-        return dateUpdatedDatabase;
+            return dateUpdatedDatabase;
+
+        } catch (CursorIndexOutOfBoundsException e) {
+
+            return 0;
+        }
+
     }
 
     public boolean isDatabaseOutdated() {
         Log.d("dateUpdatedFirebase", String.valueOf(dateUpdated));
         long dateDatabase = getDateUpdatedFromDatabase();
-        return dateUpdated > dateDatabase;
+
+        if (dateDatabase != 0) {
+            return dateUpdated > dateDatabase;
+        }
+        else {
+            return false;
+        }
 
     }
 

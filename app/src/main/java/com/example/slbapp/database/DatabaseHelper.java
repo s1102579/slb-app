@@ -70,6 +70,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context,name,factory, version);
     }
 
+    public void resetCourses() {
+        mSQLDB.execSQL("DELETE FROM CourseTable");
+    }
+
     public void insert(String table, String nullColumnHack, ContentValues values){
         mSQLDB.insert(table, nullColumnHack, values);
     }

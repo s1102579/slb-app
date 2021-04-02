@@ -54,6 +54,7 @@ public class CoursesStore {
 
         if(allCourses.size() == 0) {
             getCoursesFromFirebase();
+            dateService.setDateInDatabase();
         }
         else {
             coursesCallback.onCallback(allCourses);
@@ -77,6 +78,14 @@ public class CoursesStore {
 
         if (dateService.isDatabaseOutdated()) {
             Log.d("isDatabaseOutdated", "true");
+
+            DatabaseHelper dbhelper = DatabaseHelper.getHelper(context);
+
+            dbhelper.resetCourses();
+            getCoursesFromFirebase();
+
+            dateService.updateDateInDatabase(dateService.getDateUpdated());
+
         }
         else {
             Log.d("isDatabaseOutdated", "false");
