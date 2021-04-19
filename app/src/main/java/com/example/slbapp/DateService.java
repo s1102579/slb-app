@@ -57,9 +57,9 @@ public class DateService {
         dbHelper.updateDate(DatabaseInfo.DateTables.DATETABLE, values);
     }
 
-    public void setDateUpdatedInFirebase() {
+    public void setDateUpdatedInFirebase(long date) {
         DatabaseReference dateRef = myRef.child("dateUpdated");
-        dateRef.setValue(new Date().getTime());
+        dateRef.setValue(date);
     }
 
     public void getDateUpdatedFromFirebase() {

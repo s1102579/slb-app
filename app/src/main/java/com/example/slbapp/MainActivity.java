@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupCoursesStore() {
         coursesStore = new CoursesStore(this, new CoursesCallback() {
             @Override
-            public void onCallback(ArrayList<Course> courses) {
+            public void onCallback(List<Course> courses) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, MainFragment.newInstance())
                         .commitNow();

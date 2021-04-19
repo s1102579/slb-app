@@ -24,6 +24,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -211,11 +212,14 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
 
         if(courseIsEmpty) {
 //            ((MainActivity)getActivity()).coursesStore.addCourseToDatabase(tempCourse);
-            ((MainActivity)getActivity()).coursesStore.addCourseToFireBase(tempCourse);
+            long date = new Date().getTime();
+            ((MainActivity)getActivity()).coursesStore.addCourseToFireBase(tempCourse, date);
+            ((MainActivity)getActivity()).coursesStore.addCourseToDatabase(tempCourse, date);
             Snackbar.make(getView(), "added Course: " +
                     courseName.getEditText().getText().toString(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         } else {
+            // TODO update Course to Firebase
             ((MainActivity)getActivity()).coursesStore.updateCourseToDatabase(tempCourse);
             Snackbar.make(getView(), "updated Course: " +
                     courseName.getEditText().getText().toString(), Snackbar.LENGTH_LONG)

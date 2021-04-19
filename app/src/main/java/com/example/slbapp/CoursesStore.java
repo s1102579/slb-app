@@ -17,13 +17,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.security.auth.callback.Callback;
 
 public class CoursesStore {
 
-    private ArrayList<Course> allCourses = new ArrayList<>();
+    private List<Course> allCourses = new ArrayList<>();
+    private List<Course> firebaseCourses = new ArrayList<>();
     private List<Course> filteredCourses = new ArrayList<>();
     private Context context;
     private CoursesCallback coursesCallback;
@@ -52,13 +58,52 @@ public class CoursesStore {
 
     private void handleEmptyDatabase() {
 
+        Log.d("handleEmptyDatabase", "start");
+
         if(allCourses.size() == 0) {
-            getCoursesFromFirebase();
-            dateService.setDateInDatabase();
+           getCoursesFromFirebase(new Date().getTime(), new CoursesCallback() {
+                @Override
+                public void onCallback(List<Course> courses) {
+
+                    addAllcoursesToDatabase(firebaseCourses);
+                    setFilteredCourses(firebaseCourses);
+//                    dateService.setDateInDatabase();
+                    allCourses = getCoursesFromDatabase();
+                    coursesCallback.onCallback(firebaseCourses);
+                }
+            });
+
+
         }
         else {
             coursesCallback.onCallback(allCourses);
         }
+
+    }
+
+    private void addAllcoursesToDatabase(List<Course> courses) {
+
+//        CopyOnWriteArrayList<Course> list = new CopyOnWriteArrayList<>(courses);
+//
+//        Log.d("allCourses size", String.valueOf(list.size()));
+//
+//        for (Iterator<Course> iterator = list.iterator(); iterator.hasNext(); ) {
+//
+//            Course course = iterator.next();
+//
+//            Log.d("addAllcoursesToDatabase", "in loop");
+//
+//            addCourseToDatabase(course, new Date().getTime());
+//
+//            iterator.remove();
+
+//        }
+
+        for (Course course: courses) {
+            addCourseToDatabase(course, new Date().getTime());
+
+        }
+
 
     }
 
@@ -74,17 +119,21 @@ public class CoursesStore {
 
     public void handleOutdatedLocalDatabase() {
 
-        // TODO zorg dat als database ouder is als firebase dan update lokale firebase
-
         if (dateService.isDatabaseOutdated()) {
             Log.d("isDatabaseOutdated", "true");
 
             DatabaseHelper dbhelper = DatabaseHelper.getHelper(context);
 
             dbhelper.resetCourses();
-            getCoursesFromFirebase();
+            getCoursesFromFirebase(new Date().getTime(), new CoursesCallback() {
+                @Override
+                public void onCallback(List<Course> courses) {
+                    addAllcoursesToDatabase(allCourses);
+                    setFilteredCourses(allCourses);
+                    dateService.updateDateInDatabase(dateService.getDateUpdated());
+                }
+            });
 
-            dateService.updateDateInDatabase(dateService.getDateUpdated());
 
         }
         else {
@@ -93,7 +142,7 @@ public class CoursesStore {
 
     }
 
-    private void getCoursesFromFirebase() {
+    private void getCoursesFromFirebase(long date, CoursesCallback callback) {
         // read courses from fireBase
         ArrayList<Course> courses = new ArrayList<Course>();
         myRef.addValueEventListener(new ValueEventListener() {
@@ -106,14 +155,14 @@ public class CoursesStore {
                 // whenever data at this location is updated.
                 for (DataSnapshot courseSnapshot : dataSnapshot.getChildren()) {
                     Course course = courseSnapshot.getValue(Course.class);
-                    addCourseToDatabase(course);
                     courses.add(course);
                     Log.d("read firebase", "course is: " + course.getName());
                 }
+                firebaseCourses = courses;
+                callback.onCallback(courses);
                 coursesCallback.onCallback(courses);
                 Log.d("test Async", "test");
-                allCourses = getCoursesFromDatabase();
-                setFilteredCourses(allCourses);
+
             }
 
             @Override
@@ -124,18 +173,20 @@ public class CoursesStore {
         });
     }
 
-    public void addCourseToFireBase(Course course) {
+    public void addCourseToFireBase(Course course, long date) {
         DatabaseReference coursesRef = myRef.child(course.getName());
         coursesRef.setValue(course);
+
+        dateService.setDateUpdatedInFirebase(date);
     }
 
-    private void addAllCoursesToFirebase(ArrayList<Course> courses) {
+    private void addAllCoursesToFirebase(ArrayList<Course> courses, long date) {
         for (Course course: courses) {
-            addCourseToFireBase(course);
+            addCourseToFireBase(course, date);
         }
     }
 
-    public ArrayList<Course> getCourses() {
+    public List<Course> getCourses() {
         return allCourses;
     }
 
@@ -194,7 +245,7 @@ public class CoursesStore {
         return punten;
     }
 
-    public void addCourseToDatabase(Course course) {
+    public void addCourseToDatabase(Course course, long date) {
         DatabaseHelper dbHelper = DatabaseHelper.getHelper(context);
 
         ContentValues values = new ContentValues();
@@ -211,8 +262,8 @@ public class CoursesStore {
         this.allCourses.add(course);
         this.filteredCourses.add(course);
 
-//        setAllCourses(getCoursesFromDatabase());
-//        setFilteredCourses(allCourses);
+        dateService.updateDateInDatabase(date);
+//        dateService.setDateInDatabase();
 
     }
 
