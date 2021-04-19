@@ -36,12 +36,14 @@ public class CoursesStore {
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private DateService dateService;
+    private int teller = 0;
+    private boolean databaseIsEmpty = false;
 
     public CoursesStore(Context context, CoursesCallback coursesCallback) {
         setupFirebaseDatabase();
         setupPrivateVariables(context, coursesCallback);
-        setupDateService();
         handleEmptyDatabase();
+        setupDateService();
     }
 
     private void setupPrivateVariables(Context context, CoursesCallback coursesCallback) {
@@ -61,14 +63,18 @@ public class CoursesStore {
         Log.d("handleEmptyDatabase", "start");
 
         if(allCourses.size() == 0) {
+
+            Log.d("handleEmptyDatabase", "database is empty");
+            databaseIsEmpty = true;
+
            getCoursesFromFirebase(new Date().getTime(), new CoursesCallback() {
                 @Override
                 public void onCallback(List<Course> courses) {
 
                     addAllcoursesToDatabase(firebaseCourses);
                     setFilteredCourses(firebaseCourses);
-//                    dateService.setDateInDatabase();
                     allCourses = getCoursesFromDatabase();
+                    dateService.setDateInDatabase();
                     coursesCallback.onCallback(firebaseCourses);
                 }
             });
@@ -119,7 +125,7 @@ public class CoursesStore {
 
     public void handleOutdatedLocalDatabase() {
 
-        if (dateService.isDatabaseOutdated()) {
+        if (dateService.isDatabaseOutdated() && !databaseIsEmpty) {
             Log.d("isDatabaseOutdated", "true");
 
             DatabaseHelper dbhelper = DatabaseHelper.getHelper(context);
@@ -128,12 +134,12 @@ public class CoursesStore {
             getCoursesFromFirebase(new Date().getTime(), new CoursesCallback() {
                 @Override
                 public void onCallback(List<Course> courses) {
-                    addAllcoursesToDatabase(allCourses);
-                    setFilteredCourses(allCourses);
+                    addAllcoursesToDatabase(firebaseCourses);
+                    setFilteredCourses(firebaseCourses);
+                    allCourses = getCoursesFromDatabase();
                     dateService.updateDateInDatabase(dateService.getDateUpdated());
                 }
             });
-
 
         }
         else {
@@ -153,15 +159,18 @@ public class CoursesStore {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                for (DataSnapshot courseSnapshot : dataSnapshot.getChildren()) {
-                    Course course = courseSnapshot.getValue(Course.class);
-                    courses.add(course);
-                    Log.d("read firebase", "course is: " + course.getName());
+                if (teller <= 0) {
+                    for (DataSnapshot courseSnapshot : dataSnapshot.getChildren()) {
+                        Course course = courseSnapshot.getValue(Course.class);
+                        courses.add(course);
+                        Log.d("read firebase", "course is: " + course.getName());
+                    }
+                    teller++;
+                    firebaseCourses = courses;
+                    callback.onCallback(courses);
+                    coursesCallback.onCallback(courses);
+                    Log.d("test Async", "test");
                 }
-                firebaseCourses = courses;
-                callback.onCallback(courses);
-                coursesCallback.onCallback(courses);
-                Log.d("test Async", "test");
 
             }
 
