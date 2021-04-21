@@ -46,7 +46,9 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = courses.get(position).getName();
         holder.mContentView.setText(courses.get(position).getName());
-        holder.mYearView.setText(courses.get(position).getYear());
+        holder.mYearView.setText( "jaar: " + courses.get(position).getYear());
+        holder.mGradeView.setText("cijfer: " + courses.get(position).getGrade());
+        holder.mEctsView.setText("punten: " + courses.get(position).getEcts());
     }
 
     @Override
@@ -96,6 +98,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final View mView;
         public final TextView mContentView;
         public final TextView mYearView;
+        public final TextView mGradeView;
+        public final TextView mEctsView;
         public String mItem;
 
         public ViewHolder(View view) {
@@ -103,6 +107,9 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             mView = view;
             mContentView = (TextView) view.findViewById(R.id.content);
             mYearView = view.findViewById(R.id.content_year);
+            mGradeView = view.findViewById(R.id.content_Grade);
+            mEctsView = view.findViewById(R.id.content_Ects);
+
         }
 
         @Override

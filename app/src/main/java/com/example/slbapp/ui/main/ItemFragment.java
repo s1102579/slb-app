@@ -79,7 +79,7 @@ public class ItemFragment extends Fragment {
                 recyclerAdapter.getFilter().filter(newText);
                 return false;
             }
-        }); // check later of dit kan
+        });
         super.onCreateOptionsMenu(menu,inflater);
     }
 
@@ -108,8 +108,10 @@ public class ItemFragment extends Fragment {
                         }
 
                         @Override public void onLongItemClick(View view, int position) {
-                            // do whatever
                             Log.d("knop ingedrukt", "lange klik");
+                            Log.d("positie", String.valueOf(position));
+                            CourseFragment courseFragment = CourseFragment.newInstance(position);
+                            ((MainActivity)getActivity()).navigateToFragment(courseFragment);
                         }
                     })
             );

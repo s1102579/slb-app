@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="0dp"
     android:layout_marginRight="0dp"
-    android:background="?attr/selectableItemBackground"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.main.ItemFragment"
     tools:listitem="@layout/fragment_item" />
