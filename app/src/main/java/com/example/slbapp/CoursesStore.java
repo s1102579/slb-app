@@ -18,13 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import javax.security.auth.callback.Callback;
 
 public class CoursesStore {
 
@@ -38,24 +32,40 @@ public class CoursesStore {
     private DateService dateService;
     private int teller = 0;
     private boolean databaseIsEmpty = false;
+//    private static CoursesStore instance;
+
+    public CoursesStore() {
+
+    }
 
     public CoursesStore(Context context, CoursesCallback coursesCallback) {
         setupFirebaseDatabase();
-        setupPrivateVariables(context, coursesCallback);
+        initPrivateVariables(context, coursesCallback);
         handleEmptyDatabase();
         setupDateService();
     }
 
-    private void setupPrivateVariables(Context context, CoursesCallback coursesCallback) {
+//    public static CoursesStore getInstance() {
+//        if (instance == null) {
+//            instance = new CoursesStore();
+//        }
+//        return instance;
+//    }
+
+    private void initPrivateVariables(Context context, CoursesCallback coursesCallback) {
         this.context = context;
         this.coursesCallback = coursesCallback;
         allCourses = getCoursesFromDatabase();
-        setFilteredCourses(allCourses);
+        filteredCourses = allCourses;
     }
 
     private void setupFirebaseDatabase() {
         database = FirebaseDatabase.getInstance("https://slb-app-2a31b-default-rtdb.europe-west1.firebasedatabase.app/");
         myRef = database.getReference("courses");
+    }
+
+    public void getInstanceCoursesService() {
+
     }
 
     private void handleEmptyDatabase() {
@@ -219,6 +229,10 @@ public class CoursesStore {
 
     public void setFilteredCourses(List<Course> filteredCourses) {
         this.filteredCourses = filteredCourses;
+    }
+
+    public void setCoursesCallback(List<Course> courses) {
+        coursesCallback.onCallback(courses);
     }
 
     public List<Course> getFilteredCourses() {

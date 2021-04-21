@@ -27,6 +27,9 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     private List<Course> courses;
     private List<Course> allCourses;
 
+    // deze coursesStore alleen voor setFilteredCourses gebruiken
+    private CoursesStore coursesStore;
+
     public MyItemRecyclerViewAdapter(List<Course> courses) {
         this.courses = courses;
         this.allCourses = new ArrayList<>(courses);
@@ -83,7 +86,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         protected void publishResults(CharSequence constraint, FilterResults filterResults) {
             courses.clear();
             courses.addAll((Collection<? extends Course>)filterResults.values);
-            MainActivity.getInstance().coursesStore.setFilteredCourses(courses);
+            coursesStore = new CoursesStore();
+            coursesStore.setFilteredCourses(courses);
             notifyDataSetChanged();
         }
     };
