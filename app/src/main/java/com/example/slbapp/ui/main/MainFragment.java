@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.example.slbapp.MainActivity;
 import com.example.slbapp.R;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -68,6 +69,7 @@ public class MainFragment extends Fragment {
         pieDataSet.setValueTextSize(16);
         PieData pieData = new PieData(pieDataSet);
         chart.setData(pieData);
+        chart.getDescription().setEnabled(false);
 
         Legend legend = chart.getLegend();
         legend.setTextSize(13);
