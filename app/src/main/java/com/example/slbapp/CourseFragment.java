@@ -210,17 +210,19 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
                 grade.getEditText().getText().toString(),
                 notes.getEditText().getText().toString());
 
+        long date = new Date().getTime();
+
         if(courseIsEmpty) {
 //            ((MainActivity)getActivity()).coursesStore.addCourseToDatabase(tempCourse);
-            long date = new Date().getTime();
+
             ((MainActivity)getActivity()).coursesStore.addCourseToFireBase(tempCourse, date);
             ((MainActivity)getActivity()).coursesStore.addCourseToDatabase(tempCourse, date);
             Snackbar.make(getView(), "added Course: " +
                     courseName.getEditText().getText().toString(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         } else {
-            // TODO update Course to Firebase
-            ((MainActivity)getActivity()).coursesStore.updateCourseToDatabase(tempCourse);
+            ((MainActivity)getActivity()).coursesStore.addCourseToFireBase(tempCourse, date);
+            ((MainActivity)getActivity()).coursesStore.updateCourseToDatabase(tempCourse, date);
             Snackbar.make(getView(), "updated Course: " +
                     courseName.getEditText().getText().toString(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();

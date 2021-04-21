@@ -290,7 +290,7 @@ public class CoursesStore {
 
     }
 
-    public void updateCourseToDatabase(Course course) {
+    public void updateCourseToDatabase(Course course, long date) {
         DatabaseHelper dbHelper = DatabaseHelper.getHelper(context);
 
         ContentValues values = new ContentValues();
@@ -306,9 +306,10 @@ public class CoursesStore {
 
         dbHelper.update(DatabaseInfo.CourseTables.COURSETABLE, values);
 
-        //TODO moet nog veranderen net zoals bij addCourseToDatabase
         setAllCourses(getCoursesFromDatabase());
         setFilteredCourses(allCourses);
+
+        dateService.updateDateInDatabase(date);
 
     }
 
@@ -421,4 +422,5 @@ public class CoursesStore {
 
         return courses;
     }
+
 }
