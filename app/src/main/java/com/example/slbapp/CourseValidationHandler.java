@@ -38,7 +38,6 @@ public class CourseValidationHandler {
             }
         }
         return yearOrPeriod;
-
     }
 
     public TextInputLayout validateEcts(TextInputLayout ects, String ectsInput) {
@@ -57,7 +56,6 @@ public class CourseValidationHandler {
             }
         }
         return ects;
-
     }
 
     public TextInputLayout validateGrade(TextInputLayout grade, String gradeInput) {
@@ -87,7 +85,5 @@ public class CourseValidationHandler {
             }
         }
         return grade;
-
     }
-
 }

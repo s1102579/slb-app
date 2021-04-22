@@ -1,5 +1,6 @@
 package com.example.slbapp;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -161,6 +162,7 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
         period.getEditText().addTextChangedListener(textWatcher);
 
         if (course.getName() != null) {
+            courseName.getEditText().setFocusable(false);
             courseName.getEditText().setText(course.getName());
             year.getEditText().setText(course.getYear());
             ects.getEditText().setText(course.getEcts());
