@@ -4,38 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
-
-import com.example.slbapp.database.DatabaseHelper;
-import com.example.slbapp.database.DatabaseInfo;
 import com.example.slbapp.models.Course;
 import com.example.slbapp.ui.main.ItemFragment;
 import com.example.slbapp.ui.main.MainFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    public static SQLiteDatabase mSQLDB;
-    public CoursesStore coursesStore;
+    public CoursesService coursesService;
     private static MainActivity instance;
 
     @Override
@@ -58,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupCoursesStore() {
-        coursesStore = new CoursesStore(this, new CoursesCallback() {
+        coursesService = new CoursesService(this, new CoursesCallback() {
             @Override
             public void onCallback(List<Course> courses) {
                 getSupportFragmentManager().beginTransaction()
@@ -70,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupBottomNavigation() {
-
         BottomNavigationView.OnNavigationItemSelectedListener navListener =
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -100,15 +77,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navigateToFragment(Fragment fragment) {
-
-        // simpele fragment navigation
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, fragment, null)
                 .setReorderingAllowed(true)
-                .addToBackStack("name") // name can be null
+                .addToBackStack("name")
                 .commit();
-
     }
-
 }

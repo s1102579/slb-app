@@ -7,28 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.TextView;
-
-import com.example.slbapp.dummy.DummyContent.DummyItem;
+import android.widget.TextView;;
 import com.example.slbapp.models.Course;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> implements Filterable {
 
-//    private final List<DummyItem> mValues;
-
-    private List<Course> courses;
-    private List<Course> allCourses;
-
-    // deze coursesStore alleen voor setFilteredCourses gebruiken
-    private CoursesStore coursesStore;
+    private final List<Course> courses;
+    private final List<Course> allCourses;
 
     public MyItemRecyclerViewAdapter(List<Course> courses) {
         this.courses = courses;
@@ -88,8 +76,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         protected void publishResults(CharSequence constraint, FilterResults filterResults) {
             courses.clear();
             courses.addAll((Collection<? extends Course>)filterResults.values);
-            coursesStore = new CoursesStore();
-            coursesStore.setFilteredCourses(courses);
+            CoursesService coursesService = new CoursesService();
+            coursesService.setFilteredCourses(courses);
             notifyDataSetChanged();
         }
     };

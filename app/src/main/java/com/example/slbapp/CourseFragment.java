@@ -26,11 +26,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CourseFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CourseFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private static final String ARG_POSITION = "course";
@@ -102,7 +97,7 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
         if (getArguments() != null) {
             Log.d("onCreate", "CourseFragment onCreate if statement");
             position = getArguments().getInt(ARG_POSITION);
-            course = ((MainActivity)getActivity()).coursesStore.getFilteredCourse(position);
+            course = ((MainActivity)getActivity()).coursesService.getFilteredCourse(position);
         }
 
     }
@@ -121,7 +116,7 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
         setupButtons();
         setupTextInputs();
         setupSpinner();
-        allCourseNames = ((MainActivity)getActivity()).coursesStore.getAllCourseNames();
+        allCourseNames = ((MainActivity)getActivity()).coursesService.getAllCourseNames();
 
     }
 
@@ -156,8 +151,6 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
     }
 
     private void setupTextInputs() {
-
-        Log.d("setupTextViews", "test");
 
         courseName = (TextInputLayout) getView().findViewById(R.id.text_input_course);
         year = (TextInputLayout) getView().findViewById(R.id.text_input_year);
@@ -213,16 +206,15 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
         long date = new Date().getTime();
 
         if(courseIsEmpty) {
-//            ((MainActivity)getActivity()).coursesStore.addCourseToDatabase(tempCourse);
 
-            ((MainActivity)getActivity()).coursesStore.addCourseToFireBase(tempCourse, date);
-            ((MainActivity)getActivity()).coursesStore.addCourseToDatabase(tempCourse, date);
+            ((MainActivity)getActivity()).coursesService.addCourseToFireBase(tempCourse, date);
+            ((MainActivity)getActivity()).coursesService.addCourseToDatabase(tempCourse, date);
             Snackbar.make(getView(), "added Course: " +
                     courseName.getEditText().getText().toString(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         } else {
-            ((MainActivity)getActivity()).coursesStore.addCourseToFireBase(tempCourse, date);
-            ((MainActivity)getActivity()).coursesStore.updateCourseToDatabase(tempCourse, date);
+            ((MainActivity)getActivity()).coursesService.addCourseToFireBase(tempCourse, date);
+            ((MainActivity)getActivity()).coursesService.updateCourseToDatabase(tempCourse, date);
             Snackbar.make(getView(), "updated Course: " +
                     courseName.getEditText().getText().toString(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();

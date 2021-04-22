@@ -9,14 +9,12 @@ import android.util.Log;
 
 import com.example.slbapp.database.DatabaseHelper;
 import com.example.slbapp.database.DatabaseInfo;
-import com.example.slbapp.models.Course;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 public class DateService {
@@ -44,7 +42,6 @@ public class DateService {
         values.put(DatabaseInfo.DateColumn.DATE_UPDATED, String.valueOf(currentDate));
 
         dbHelper.insert(DatabaseInfo.DateTables.DATETABLE, null, values);
-
     }
 
     public void updateDateInDatabase(long date) {
@@ -71,8 +68,6 @@ public class DateService {
             // https://stackoverflow.com/questions/47847694/how-to-return-datasnapshot-value-as-a-result-of-a-method/47853774
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
                 for (DataSnapshot datesnapshot : dataSnapshot.getChildren()) {
                     dateUpdatedTemp = datesnapshot.getValue(Long.class);
                 }
@@ -83,7 +78,6 @@ public class DateService {
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Failed to read value
                 Log.w("read fireBase failed", "Failed to read value.", error.toException());
             }
         });
@@ -107,7 +101,6 @@ public class DateService {
             return dateUpdatedDatabase;
 
         } catch (CursorIndexOutOfBoundsException e) {
-
             return 0;
         }
 
@@ -123,12 +116,10 @@ public class DateService {
         else {
             return false;
         }
-
     }
 
     private void setupFirebaseDatabase() {
         database = FirebaseDatabase.getInstance("https://slb-app-2a31b-default-rtdb.europe-west1.firebasedatabase.app/");
         myRef = database.getReference("dates");
     }
-
 }

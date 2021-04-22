@@ -1,5 +1,3 @@
-
-
 package com.example.slbapp;
 
 import android.content.ContentValues;
@@ -20,37 +18,26 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CoursesStore {
+public class CoursesService {
 
     private List<Course> allCourses = new ArrayList<>();
     private List<Course> firebaseCourses = new ArrayList<>();
     private List<Course> filteredCourses = new ArrayList<>();
     private Context context;
     private CoursesCallback coursesCallback;
-    private FirebaseDatabase database;
     private DatabaseReference myRef;
     private DateService dateService;
     private int teller = 0;
     private boolean databaseIsEmpty = false;
-//    private static CoursesStore instance;
 
-    public CoursesStore() {
+    public CoursesService() {}
 
-    }
-
-    public CoursesStore(Context context, CoursesCallback coursesCallback) {
+    public CoursesService(Context context, CoursesCallback coursesCallback) {
         setupFirebaseDatabase();
         initPrivateVariables(context, coursesCallback);
         handleEmptyDatabase();
         setupDateService();
     }
-
-//    public static CoursesStore getInstance() {
-//        if (instance == null) {
-//            instance = new CoursesStore();
-//        }
-//        return instance;
-//    }
 
     private void initPrivateVariables(Context context, CoursesCallback coursesCallback) {
         this.context = context;
@@ -60,27 +47,20 @@ public class CoursesStore {
     }
 
     private void setupFirebaseDatabase() {
-        database = FirebaseDatabase.getInstance("https://slb-app-2a31b-default-rtdb.europe-west1.firebasedatabase.app/");
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://slb-app-2a31b-default-rtdb.europe-west1.firebasedatabase.app/");
         myRef = database.getReference("courses");
     }
 
-    public void getInstanceCoursesService() {
-
-    }
-
     private void handleEmptyDatabase() {
-
         Log.d("handleEmptyDatabase", "start");
-
         if(allCourses.size() == 0) {
 
             Log.d("handleEmptyDatabase", "database is empty");
             databaseIsEmpty = true;
 
-           getCoursesFromFirebase(new Date().getTime(), new CoursesCallback() {
+           getCoursesFromFirebase(new CoursesCallback() {
                 @Override
                 public void onCallback(List<Course> courses) {
-
                     addAllcoursesToDatabase(firebaseCourses);
                     setFilteredCourses(firebaseCourses);
                     allCourses = getCoursesFromDatabase();
@@ -88,39 +68,16 @@ public class CoursesStore {
                     coursesCallback.onCallback(firebaseCourses);
                 }
             });
-
-
         }
         else {
             coursesCallback.onCallback(allCourses);
         }
-
     }
 
     private void addAllcoursesToDatabase(List<Course> courses) {
-
-//        CopyOnWriteArrayList<Course> list = new CopyOnWriteArrayList<>(courses);
-//
-//        Log.d("allCourses size", String.valueOf(list.size()));
-//
-//        for (Iterator<Course> iterator = list.iterator(); iterator.hasNext(); ) {
-//
-//            Course course = iterator.next();
-//
-//            Log.d("addAllcoursesToDatabase", "in loop");
-//
-//            addCourseToDatabase(course, new Date().getTime());
-//
-//            iterator.remove();
-
-//        }
-
         for (Course course: courses) {
             addCourseToDatabase(course, new Date().getTime());
-
         }
-
-
     }
 
     private void setupDateService() {
@@ -132,16 +89,14 @@ public class CoursesStore {
         });
     }
 
-
     public void handleOutdatedLocalDatabase() {
-
         if (dateService.isDatabaseOutdated() && !databaseIsEmpty) {
             Log.d("isDatabaseOutdated", "true");
 
             DatabaseHelper dbhelper = DatabaseHelper.getHelper(context);
 
             dbhelper.resetCourses();
-            getCoursesFromFirebase(new Date().getTime(), new CoursesCallback() {
+            getCoursesFromFirebase(new CoursesCallback() {
                 @Override
                 public void onCallback(List<Course> courses) {
                     addAllcoursesToDatabase(firebaseCourses);
@@ -150,16 +105,13 @@ public class CoursesStore {
                     dateService.updateDateInDatabase(dateService.getDateUpdated());
                 }
             });
-
-        }
-        else {
+        } else {
             Log.d("isDatabaseOutdated", "false");
         }
 
     }
 
-    private void getCoursesFromFirebase(long date, CoursesCallback callback) {
-        // read courses from fireBase
+    private void getCoursesFromFirebase(CoursesCallback callback) {
         ArrayList<Course> courses = new ArrayList<Course>();
         myRef.addValueEventListener(new ValueEventListener() {
 
@@ -167,8 +119,6 @@ public class CoursesStore {
             // https://stackoverflow.com/questions/47847694/how-to-return-datasnapshot-value-as-a-result-of-a-method/47853774
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
                 if (teller <= 0) {
                     for (DataSnapshot courseSnapshot : dataSnapshot.getChildren()) {
                         Course course = courseSnapshot.getValue(Course.class);
@@ -179,14 +129,11 @@ public class CoursesStore {
                     firebaseCourses = courses;
                     callback.onCallback(courses);
                     coursesCallback.onCallback(courses);
-                    Log.d("test Async", "test");
                 }
-
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Failed to read value
                 Log.w("read fireBase failed", "Failed to read value.", error.toException());
             }
         });
@@ -197,16 +144,6 @@ public class CoursesStore {
         coursesRef.setValue(course);
 
         dateService.setDateUpdatedInFirebase(date);
-    }
-
-    private void addAllCoursesToFirebase(ArrayList<Course> courses, long date) {
-        for (Course course: courses) {
-            addCourseToFireBase(course, date);
-        }
-    }
-
-    public List<Course> getCourses() {
-        return allCourses;
     }
 
     public ArrayList<String> getAllCourseNames() {
@@ -223,17 +160,10 @@ public class CoursesStore {
         this.allCourses = courses;
     }
 
-    public Course getCourse(int position) {
-        return getCourses().get(position);
-    }
-
     public void setFilteredCourses(List<Course> filteredCourses) {
         this.filteredCourses = filteredCourses;
     }
 
-    public void setCoursesCallback(List<Course> courses) {
-        coursesCallback.onCallback(courses);
-    }
 
     public List<Course> getFilteredCourses() {
         return filteredCourses;
@@ -286,8 +216,6 @@ public class CoursesStore {
         this.filteredCourses.add(course);
 
         dateService.updateDateInDatabase(date);
-//        dateService.setDateInDatabase();
-
     }
 
     public void updateCourseToDatabase(Course course, long date) {
@@ -311,78 +239,6 @@ public class CoursesStore {
 
         dateService.updateDateInDatabase(date);
 
-    }
-
-    public void getFromDatabase() {
-        DatabaseHelper dbHelper = DatabaseHelper.getHelper(context);
-
-        Cursor rs = dbHelper.query(DatabaseInfo.CourseTables.COURSETABLE, new String[]{"*"},
-                null, null, null, null, null);
-
-        rs.moveToFirst();
-        String name = (String) rs.getString(rs.getColumnIndex("name"));
-        Log.d("Tim heeft gevonden=", "deze: "+ name);
-    }
-
-//    private void makeClassesFromJson() {
-//        DatabaseHelper dbHelper = DatabaseHelper.getHelper(context);
-//
-////        JsonReader json = new JsonReader(new FileReader(readJSONFromAsset()));
-//
-////        dbHelper.dropCourses(mSQLDB);
-//
-//        // van bestand in project
-//        String json = readJSONFromAsset("courses.json");
-//
-//        Log.d("json bestand", json);
-//        Gson gson = new Gson();
-//
-//        Course[] courses = gson.fromJson(json, Course[].class);
-//
-//        for (Course cours : courses) {
-//            addCourseToDatabase(cours);
-//        }
-//
-//    }
-
-    // haalt een json bestand van assets en zet die om in String
-//    public String readJSONFromAsset(String filename) {
-//        String json = null;
-//        try {
-//            InputStream is = getAssets().open(filename);
-//            int size = is.available();
-//            byte[] buffer = new byte[size];
-//            is.read(buffer);
-//            is.close();
-//            json = new String(buffer, "UTF-8");
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//            return null;
-//        }
-//        return json;
-//    }
-
-    public ArrayList<String> getCourseNamesFromDatabase() {
-        DatabaseHelper dbHelper = DatabaseHelper.getHelper(context);
-
-        Cursor rs = dbHelper.query(DatabaseInfo.CourseTables.COURSETABLE, new String[]{"*"},
-                null, null, null, null, null);
-
-        ArrayList<String> coursenames = new ArrayList<>();
-        if(rs.moveToFirst()) {
-            while (!rs.isAfterLast()) {
-                String name = (String) rs.getString(rs.getColumnIndex("name"));
-                coursenames.add(name);
-                rs.moveToNext();
-            }
-        }
-
-        String rows_amount = String.valueOf(rs.getCount());
-        Log.d("aantal rijen: ", rows_amount);
-//        Snackbar.make(findViewById(android.R.id.content), "total courses: " + rows_amount,
-//                Snackbar.LENGTH_LONG).setAction("", null).show();
-
-        return coursenames;
     }
 
     private boolean convertIntToBoolean (int number) {
@@ -417,8 +273,6 @@ public class CoursesStore {
 
         String aantal_rijen = String.valueOf(rs.getCount());
         Log.d("aantal rijen: ", aantal_rijen);
-//        Snackbar.make(this.findViewById(android.R.id.content), "total courses: " + aantal_rijen,
-//                Snackbar.LENGTH_LONG).setAction("", null).show();
 
         return courses;
     }

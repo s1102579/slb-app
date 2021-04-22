@@ -2,15 +2,12 @@ package com.example.slbapp.ui.main;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,33 +15,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.example.slbapp.CourseFragment;
 import com.example.slbapp.MainActivity;
 import com.example.slbapp.MyItemRecyclerViewAdapter;
 import com.example.slbapp.R;
 import com.example.slbapp.RecyclerItemClickListener;
 
-/**
- * A fragment representing a list of Items.
- */
 public class ItemFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private MyItemRecyclerViewAdapter recyclerAdapter = null;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public ItemFragment() {
-    }
+    public ItemFragment() {}
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static ItemFragment newInstance(int columnCount) {
         ItemFragment fragment = new ItemFragment();
         Bundle args = new Bundle();
@@ -55,7 +39,7 @@ public class ItemFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        recyclerAdapter = new MyItemRecyclerViewAdapter( ((MainActivity)getActivity()).coursesStore.getCoursesFromDatabase());
+        recyclerAdapter = new MyItemRecyclerViewAdapter( ((MainActivity)getActivity()).coursesService.getCoursesFromDatabase());
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
@@ -83,8 +67,6 @@ public class ItemFragment extends Fragment {
         super.onCreateOptionsMenu(menu,inflater);
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -99,8 +81,8 @@ public class ItemFragment extends Fragment {
             recyclerView.addItemDecoration(dividerItemDecoration);
             recyclerView.addOnItemTouchListener(
                     new RecyclerItemClickListener(context, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+
                         @Override public void onItemClick(View view, int position) {
-                            // TODO: hier de een nieuwe fragment openen van 1 van de courses
                             Log.d("knop ingedrukt", "korte klik");
                             Log.d("positie", String.valueOf(position));
                             CourseFragment courseFragment = CourseFragment.newInstance(position);

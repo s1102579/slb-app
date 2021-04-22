@@ -1,7 +1,5 @@
 package com.example.slbapp.database;
 
-import java.util.Date;
-
 public class DatabaseInfo {
 
     public class CourseTables {
