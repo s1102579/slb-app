@@ -50,7 +50,6 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             String courseNameInput = courseName.getEditText().getText().toString().trim();
             String yearInput = year.getEditText().getText().toString().trim();
             String ectsInput = ects.getEditText().getText().toString().trim();
@@ -112,7 +111,6 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         setupButtons();
         setupTextInputs();
         setupSpinner();
@@ -121,7 +119,6 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
     }
 
     // deze twee methods zijn voor de Spinner
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         course.setOptional(position == 0);
@@ -139,7 +136,6 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
                 R.array.isOptionalString, android.R.layout.simple_spinner_item);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
@@ -151,7 +147,6 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
     }
 
     private void setupTextInputs() {
-
         courseName = (TextInputLayout) getView().findViewById(R.id.text_input_course);
         year = (TextInputLayout) getView().findViewById(R.id.text_input_year);
         ects = (TextInputLayout) getView().findViewById(R.id.text_input_ects);
@@ -194,7 +189,6 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
     }
 
     private void saveButtonHandler() {
-
         Course tempCourse = new Course(year.getEditText().getText().toString(),
                 period.getEditText().getText().toString(),
                 courseName.getEditText().getText().toString(),
@@ -206,7 +200,6 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
         long date = new Date().getTime();
 
         if(courseIsEmpty) {
-
             ((MainActivity)getActivity()).coursesService.addCourseToFireBase(tempCourse, date);
             ((MainActivity)getActivity()).coursesService.addCourseToDatabase(tempCourse, date);
             Snackbar.make(getView(), "added Course: " +

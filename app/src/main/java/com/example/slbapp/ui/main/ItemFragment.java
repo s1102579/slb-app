@@ -83,17 +83,11 @@ public class ItemFragment extends Fragment {
                     new RecyclerItemClickListener(context, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
 
                         @Override public void onItemClick(View view, int position) {
-                            Log.d("knop ingedrukt", "korte klik");
-                            Log.d("positie", String.valueOf(position));
-                            CourseFragment courseFragment = CourseFragment.newInstance(position);
-                            ((MainActivity)getActivity()).navigateToFragment(courseFragment);
+                           handleClick(position);
                         }
 
                         @Override public void onLongItemClick(View view, int position) {
-                            Log.d("knop ingedrukt", "lange klik");
-                            Log.d("positie", String.valueOf(position));
-                            CourseFragment courseFragment = CourseFragment.newInstance(position);
-                            ((MainActivity)getActivity()).navigateToFragment(courseFragment);
+                            handleClick(position);
                         }
                     })
             );
@@ -105,5 +99,12 @@ public class ItemFragment extends Fragment {
             recyclerView.setAdapter(recyclerAdapter);
         }
         return view;
+    }
+
+    private void handleClick(int position) {
+        Log.d("knop ingedrukt", "lange klik");
+        Log.d("positie", String.valueOf(position));
+        CourseFragment courseFragment = CourseFragment.newInstance(position);
+        ((MainActivity)getActivity()).navigateToFragment(courseFragment);
     }
 }

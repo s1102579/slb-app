@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class CourseValidationHandler {
 
     public TextInputLayout validateCourseName(TextInputLayout courseName, String courseNameInput, ArrayList<String> allCourseNames) {
-
         if (courseName.hasFocus()) {
             if(courseNameInput.isEmpty()) {
                 courseName.setError("Fields can't be empty");
@@ -19,11 +18,9 @@ public class CourseValidationHandler {
             }
         }
         return courseName;
-
     }
 
     public TextInputLayout validateYearOrPeriod(TextInputLayout yearOrPeriod, String yearOrPeriodInput) {
-
         if(yearOrPeriod.hasFocus()) {
             if(yearOrPeriodInput.isEmpty()) {
                 yearOrPeriod.setError("Fields can't be empty");
@@ -45,7 +42,6 @@ public class CourseValidationHandler {
     }
 
     public TextInputLayout validateEcts(TextInputLayout ects, String ectsInput) {
-
         if(ects.hasFocus()) {
             if(ectsInput.isEmpty()) {
                 ects.setError("Fields can't be empty");
@@ -65,7 +61,6 @@ public class CourseValidationHandler {
     }
 
     public TextInputLayout validateGrade(TextInputLayout grade, String gradeInput) {
-
         if(grade.hasFocus()) {
             if(gradeInput.isEmpty()) {
                 grade.setError("Fields can't be empty");

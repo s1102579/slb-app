@@ -266,11 +266,8 @@ public class CoursesService {
                 courses.add(course);
                 rs.moveToNext();
 
-                Log.d("boolean: ", String.valueOf(isOptional));
-                Log.d("year: ", year);
             }
         }
-
         String aantal_rijen = String.valueOf(rs.getCount());
         Log.d("aantal rijen: ", aantal_rijen);
 
