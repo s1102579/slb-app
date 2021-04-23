@@ -108,7 +108,6 @@ public class CoursesService {
         } else {
             Log.d("isDatabaseOutdated", "false");
         }
-
     }
 
     private void getCoursesFromFirebase(CoursesCallback callback) {
@@ -164,7 +163,6 @@ public class CoursesService {
         this.filteredCourses = filteredCourses;
     }
 
-
     public List<Course> getFilteredCourses() {
         return filteredCourses;
     }
@@ -192,9 +190,7 @@ public class CoursesService {
                     punten += coursePoints;
                 }
             }
-
         }
-
         return punten;
     }
 
@@ -238,7 +234,6 @@ public class CoursesService {
         setFilteredCourses(allCourses);
 
         dateService.updateDateInDatabase(date);
-
     }
 
     private boolean convertIntToBoolean (int number) {
@@ -273,5 +268,4 @@ public class CoursesService {
 
         return courses;
     }
-
 }

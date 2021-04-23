@@ -21,16 +21,16 @@ import com.example.slbapp.MyItemRecyclerViewAdapter;
 import com.example.slbapp.R;
 import com.example.slbapp.RecyclerItemClickListener;
 
-public class ItemFragment extends Fragment {
+public class CoursesFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private MyItemRecyclerViewAdapter recyclerAdapter = null;
 
-    public ItemFragment() {}
+    public CoursesFragment() {}
 
-    public static ItemFragment newInstance(int columnCount) {
-        ItemFragment fragment = new ItemFragment();
+    public static CoursesFragment newInstance(int columnCount) {
+        CoursesFragment fragment = new CoursesFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);

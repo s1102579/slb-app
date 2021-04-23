@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import com.example.slbapp.models.Course;
-import com.example.slbapp.ui.main.ItemFragment;
+import com.example.slbapp.ui.main.CoursesFragment;
 import com.example.slbapp.ui.main.MainFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.List;
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                                 selectedFragment = MainFragment.newInstance();
                                 break;
                             case R.id.nav_courses:
-                                selectedFragment = new ItemFragment();
+                                selectedFragment = new CoursesFragment();
                                 break;
                             case R.id.nav_addCourse:
                                 selectedFragment = new CourseFragment();

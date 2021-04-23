@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/itemFragment"
-        android:name="com.example.slbapp.ui.main.ItemFragment"
+        android:name="com.example.slbapp.ui.main.CoursesFragment"
         android:label="fragment_item_list"
         tools:layout="@layout/fragment_item_list" >
         <action

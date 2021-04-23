@@ -1,6 +1,5 @@
 package com.example.slbapp;
 
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,7 +19,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.example.slbapp.models.Course;
-import com.example.slbapp.ui.main.ItemFragment;
+import com.example.slbapp.ui.main.CoursesFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -214,6 +213,6 @@ public class CourseFragment extends Fragment implements AdapterView.OnItemSelect
                     courseName.getEditText().getText().toString(), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
-        ((MainActivity)getActivity()).navigateToFragment(new ItemFragment());
+        ((MainActivity)getActivity()).navigateToFragment(new CoursesFragment());
     }
 }
